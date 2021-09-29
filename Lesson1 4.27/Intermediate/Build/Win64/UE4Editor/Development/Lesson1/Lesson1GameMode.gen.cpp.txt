@@ -1,0 +1,9 @@
+C:\Users\Professional\Documents\Unreal Projects\UE4_GB\Lesson1 4.27\Intermediate\Build\Win64\UE4Editor\Development\Lesson1\Definitions.Lesson1.h
+C:\Program Files\Epic Games\UE_4.27\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
+C:\Program Files\Epic Games\UE_4.27\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h
+C:\Users\Professional\Documents\Unreal Projects\UE4_GB\Lesson1 4.27\Source\Lesson1/Lesson1GameMode.h
+C:\Program Files\Epic Games\UE_4.27\Engine\Source\Runtime\Engine\Classes\GameFramework/GameModeBase.h
+C:\Program Files\Epic Games\UE_4.27\Engine\Source\Runtime\Engine\Classes\Engine/ServerStatReplicator.h
+C:\Program Files\Epic Games\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ServerStatReplicator.generated.h
+C:\Program Files\Epic Games\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\GameModeBase.generated.h
+C:\Users\Professional\Documents\Unreal Projects\UE4_GB\Lesson1 4.27\Intermediate\Build\Win64\UE4Editor\Inc\Lesson1\Lesson1GameMode.generated.h

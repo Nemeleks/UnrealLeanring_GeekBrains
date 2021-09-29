@@ -1,0 +1,2 @@
+C:\Users\Professional\Documents\Unreal Projects\UE4_GB\Lesson1 4.27\Intermediate\Build\Win64\UE4Editor\Development\Lesson1\Definitions.Lesson1.h
+C:\Users\Professional\Documents\Unreal Projects\UE4_GB\Lesson1 4.27\Source\Lesson1\Lesson1.h

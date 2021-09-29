@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Lesson1.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{6D78DBD6-6131-4356-BF3F-4F1FFEEDE71A}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Lesson1.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\Lesson1Editor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{27345418-34FD-4E83-A38F-21F232CE0F43}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\Lesson1">
+      <UniqueIdentifier>{ADFFAACC-D812-46E8-B41E-FCE83FF5236C}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Lesson1\Lesson1.Build.cs">
+      <Filter>Source\Lesson1</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\Lesson1\Lesson1.cpp">
+      <Filter>Source\Lesson1</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Lesson1\Lesson1.h">
+      <Filter>Source\Lesson1</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Lesson1\Lesson1Character.cpp">
+      <Filter>Source\Lesson1</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Lesson1\Lesson1Character.h">
+      <Filter>Source\Lesson1</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Lesson1\Lesson1GameMode.cpp">
+      <Filter>Source\Lesson1</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Lesson1\Lesson1GameMode.h">
+      <Filter>Source\Lesson1</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
