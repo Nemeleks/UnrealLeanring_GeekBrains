@@ -11,8 +11,10 @@ ATankPlayerController::ATankPlayerController()
 void ATankPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	InputComponent->BindAxis("MoveForward", this, &ATankPlayerController::MoveForward);
-	InputComponent->BindAxis("MoveRight", this, &ATankPlayerController::MoveRight);
+	//InputComponent->BindAxis("MoveForward", this, &ATankPlayerController::MoveForward);
+	//InputComponent->BindAxis("MoveRight", this, &ATankPlayerController::MoveRight);
+	InputComponent->BindAxis("MoveForward", TankPawn, &ATankPawn::MoveForward);
+	InputComponent->BindAxis("MoveRight", TankPawn, &ATankPawn::MoveRight);
 }
 
 void ATankPlayerController::BeginPlay()

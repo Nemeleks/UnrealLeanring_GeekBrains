@@ -34,33 +34,35 @@ void ATankPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector CurrentLocation = GetActorLocation();
-	FVector ForwardVector = GetActorForwardVector();
-	FVector RightVector = GetActorRightVector();
-	FVector NewLocation;
-	if (TargetRightAxisValue == 0)
-	{
-		NewLocation = CurrentLocation + ForwardVector * MoveSpeed * TargetForwardAxisValue * DeltaTime;
-	}
-	else if (TargetForwardAxisValue == 0)
-	{
-		NewLocation = CurrentLocation + RightVector * MoveSpeed * TargetRightAxisValue * DeltaTime;
-	}
-	else
-	{
-		NewLocation = CurrentLocation;
-	}
-	SetActorLocation(NewLocation);
+	//FVector CurrentLocation = GetActorLocation();
+	//FVector ForwardVector = GetActorForwardVector();
+	//FVector RightVector = GetActorRightVector();
+	//FVector NewLocation;
+	//if (TargetRightAxisValue == 0)
+	//{
+	//	NewLocation = CurrentLocation + ForwardVector * MoveSpeed * TargetForwardAxisValue * DeltaTime;
+	//}
+	//else if (TargetForwardAxisValue == 0)
+	//{
+	//	NewLocation = CurrentLocation + RightVector * MoveSpeed * TargetRightAxisValue * DeltaTime;
+	//}
+	//else
+	//{
+	//	NewLocation = CurrentLocation;
+	//}
+	//SetActorLocation(NewLocation);
 }
 
 void ATankPawn::MoveForward(float Amount)
 {
-	TargetForwardAxisValue = Amount;
+	//TargetForwardAxisValue = Amount;
+	AddMovementInput(GetActorForwardVector(), Amount);
 }
 
 void ATankPawn::MoveRight(float Amount)
 {
-	TargetRightAxisValue = Amount;
+	//TargetRightAxisValue = Amount;
+	AddMovementInput(GetActorRightVector(), Amount);
 }
 
 
