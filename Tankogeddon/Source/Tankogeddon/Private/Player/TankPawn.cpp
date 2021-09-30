@@ -10,14 +10,19 @@ ATankPawn::ATankPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	TankMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TankMesh");
-	SetRootComponent(TankMeshComponent);
+	TankMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TankMesh"));
+	//SetRootComponent(TankMeshComponent);
+	RootComponent = TankMeshComponent;
 
 	TurretMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TurretMesh");
 	TurretMeshComponent->SetupAttachment(RootComponent);
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	SpringArmComponent->SetupAttachment(RootComponent);
+	SpringArmComponent->bDoCollisionTest = false;
+	SpringArmComponent->bInheritPitch = false;
+	SpringArmComponent->bInheritYaw = false;
+	SpringArmComponent->bInheritRoll = false;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
