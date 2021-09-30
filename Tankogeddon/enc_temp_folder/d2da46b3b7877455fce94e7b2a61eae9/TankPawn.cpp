@@ -46,10 +46,6 @@ void ATankPawn::Tick(float DeltaTime)
 	{
 		NewLocation = CurrentLocation + RightVector * MoveSpeed * TargetRightAxisValue * DeltaTime;
 	}
-	else
-	{
-		NewLocation = CurrentLocation;
-	}
 	SetActorLocation(NewLocation);
 }
 
