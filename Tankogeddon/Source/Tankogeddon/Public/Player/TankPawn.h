@@ -40,6 +40,7 @@ protected:
 private:
 	float TargetForwardAxisValue = 0.f;
 	float TargetRightAxisValue = 0.f;
+	float TargetTurnAxisValue = 0.f;
 
 public:	
 	// Called every frame
@@ -50,5 +51,8 @@ public:
 
 	UFUNCTION()
 	void MoveRight(float Amount);
+
+	UFUNCTION()
+	void TurnTank(float Amount);
 
 };

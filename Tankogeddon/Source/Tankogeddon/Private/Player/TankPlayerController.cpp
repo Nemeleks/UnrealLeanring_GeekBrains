@@ -13,6 +13,7 @@ void ATankPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	InputComponent->BindAxis("MoveForward", this, &ATankPlayerController::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &ATankPlayerController::MoveRight);
+	InputComponent->BindAxis("TurnTank", this, &ATankPlayerController::TurnTank);
 }
 
 void ATankPlayerController::BeginPlay()
@@ -30,5 +31,10 @@ void ATankPlayerController::MoveForward(float Amount)
 void ATankPlayerController::MoveRight(float Amount)
 {
 	TankPawn->MoveRight(Amount);
+}
+
+void ATankPlayerController::TurnTank(float Amount)
+{
+	TankPawn->TurnTank(Amount);
 }
 

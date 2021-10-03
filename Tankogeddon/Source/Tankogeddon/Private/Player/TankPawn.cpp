@@ -11,8 +11,7 @@ ATankPawn::ATankPawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	TankMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TankMesh"));
-	//SetRootComponent(TankMeshComponent);
-	RootComponent = TankMeshComponent;
+	SetRootComponent(TankMeshComponent);
 
 	TurretMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TurretMesh");
 	TurretMeshComponent->SetupAttachment(RootComponent);
@@ -42,9 +41,11 @@ void ATankPawn::Tick(float DeltaTime)
 	FVector CurrentLocation = GetActorLocation();
 	FVector ForwardVector = GetActorForwardVector();
 	FVector RightVector = GetActorRightVector();
-	FVector NewLocation = CurrentLocation + (ForwardVector * TargetForwardAxisValue + RightVector * TargetRightAxisValue) * MoveSpeed  * DeltaTime;
+	FVector NewLocation = CurrentLocation + (ForwardVector * TargetForwardAxisValue + RightVector * TargetRightAxisValue) * MoveSpeed  * DeltaTime;	
+	FRotator NewRotation = GetActorRotation();
+	NewRotation.Yaw += RotationSpeed * TargetTurnAxisValue * DeltaTime;
 
-	SetActorLocation(NewLocation);
+	SetActorLocationAndRotation(NewLocation, NewRotation);
 }
 
 void ATankPawn::MoveForward(float Amount)
@@ -55,6 +56,11 @@ void ATankPawn::MoveForward(float Amount)
 void ATankPawn::MoveRight(float Amount)
 {
 	TargetRightAxisValue = Amount;
+}
+
+void ATankPawn::TurnTank(float Amount)
+{
+	TargetTurnAxisValue = Amount;
 }
 
 

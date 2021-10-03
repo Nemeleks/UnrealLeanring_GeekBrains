@@ -27,4 +27,6 @@ protected:
 
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
+
+	void TurnTank(float Amount);
 };
