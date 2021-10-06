@@ -22,20 +22,45 @@ ACannon::ACannon()
 
 void ACannon::Fire()
 {
-	if (!bIsReadyToFire) return;
-	bIsReadyToFire = false;
-	CurrentAmmo -= 1;
-
+	if (CurrentAmmo < 1) return;
 	if (CannonType == ECannonType::FireProjectiles)
 	{
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Green, TEXT("Fire - Projectile"));
+		if (!bIsReadyToFireProjectiles) return;
+		CurrentAmmo -= 1;
+		bIsReadyToFireProjectiles = false;
+		ProjectilesFire();
+		GetWorld()->GetTimerManager().SetTimer(ProjectilesReloadTimerHandle, this, &ACannon::ProjectilesReload, 1.f / FireRate, false);
 	}
 	else if (CannonType == ECannonType::FireTrace)
 	{
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Green, TEXT("Fire - Trace"));
+		if (!bIsReadyToFireTrace) return;
+		CurrentAmmo -= 1;
+		bIsReadyToFireTrace = false;
+		if (bIsReadyToMultiplyFire)
+		{
+			bIsReadyToMultiplyFire = false;
+			GetWorld()->GetTimerManager().SetTimer(TraceFireTimerHandle, this, &ACannon::TraceFire, 0.3f / FireRate, true);
+		}	
+		GetWorld()->GetTimerManager().SetTimer(TraceReloadTimerHandle, this, &ACannon::TraceReload, 5.f / FireRate, false);
 	}
+}
+	
 
-	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1.f / FireRate, false);
+void ACannon::ProjectilesFire()
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Green, TEXT("Fire - Projectile"));
+}
+
+void ACannon::TraceFire()
+{
+
+	MultiplyFireCurrent += 1;
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Green, TEXT("Fire - Trace"));
+
+	if (MultiplyFireCurrent == MultiplyFireMaxCount)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TraceFireTimerHandle);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -43,20 +68,27 @@ void ACannon::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	bIsReadyToFire = true;
+	bIsReadyToFireProjectiles = true;
+	bIsReadyToFireTrace = true;
+	bIsReadyToMultiplyFire = true;
 	CurrentAmmo = MaxAmmo;
 }
 
 void ACannon::EndPlay(EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-	GetWorld()->GetTimerManager().ClearTimer(ReloadTimerHandle);
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 }
 
-void ACannon::Reload()
+void ACannon::ProjectilesReload()
 {
-	if (CurrentAmmo <= 0) return;
-	bIsReadyToFire = true;
+	bIsReadyToFireProjectiles = true;
 }
 
+void ACannon::TraceReload()
+{
+	bIsReadyToFireTrace = true;
+	bIsReadyToMultiplyFire = true;
+	MultiplyFireCurrent = 0;
+}
 

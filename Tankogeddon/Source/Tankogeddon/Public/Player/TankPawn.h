@@ -88,4 +88,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	void ChangeCannon();
+
+	UFUNCTION(BlueprintCallable, Category = "Turret")
+	ACannon* GetCannon() const {return Cannon;};
 };

@@ -33,18 +33,30 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
 	ECannonType CannonType = ECannonType::FireProjectiles;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
+	int32 MultiplyFireMaxCount = 3;
 
 private:
-	bool bIsReadyToFire = false;
-	FTimerHandle ReloadTimerHandle;
+	bool bIsReadyToFireProjectiles = false;
+	bool bIsReadyToFireTrace = false;
+	bool bIsReadyToMultiplyFire = false;
+
+	FTimerHandle ProjectilesReloadTimerHandle;
+	FTimerHandle TraceReloadTimerHandle;
+	FTimerHandle TraceFireTimerHandle;
+
 	int32 CurrentAmmo = 0;
+	int32 MultiplyFireCurrent = 0;
 public:	
 	// Sets default values for this actor's properties
 	ACannon();
 
 	void Fire();
+	void ProjectilesFire();
+	void TraceFire();
 
-	int32 GetCurrentProjectiles() const { return CurrentAmmo; };
+	int32 GetCurrentAmmo() const { return CurrentAmmo; };
 	ECannonType GetCannonType() const { return CannonType; };
 	void SetCannonType(ECannonType Type) { CannonType = Type; };
 
@@ -54,6 +66,6 @@ protected:
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 private:
-	void Reload();
-
+	void ProjectilesReload();
+	void TraceReload();
 };
