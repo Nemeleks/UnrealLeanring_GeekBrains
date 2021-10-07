@@ -91,4 +91,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	ACannon* GetCannon() const {return Cannon;};
+
+	//FVector GetTurretPosition() const { return TurretTargetPosition; };
 };

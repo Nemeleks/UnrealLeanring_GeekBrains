@@ -30,13 +30,31 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 	FVector WorldMouseDirection;
 	DeprojectMousePositionToWorld(MousePos, WorldMouseDirection);
-	MousePos.Z = TankPawn->GetActorLocation().Z;
+	//FVector MousePosition = MousePos;
+	MousePos.Z = TankPawn->GetTurretMeshLocation().Z;
+	//MousePosition.Z = TankPawn->GetActorLocation().Z;
+	
+	FVector TurretTargetDirection = MousePos - TankPawn->GetTurretMeshLocation();
 
-	FVector TurretTargetDirection = MousePos - TankPawn->GetActorLocation();
 	TurretTargetDirection.Normalize();
-	FVector TurretTargetPosition = CannonCurrentLocation + TurretTargetDirection * 1000.f;
-	DrawDebugLine(GetWorld(), CannonCurrentLocation, TurretTargetPosition, FColor::Green, false, 0.1f, 0, 5.f);
+
+	//FVector TurretTargetDirection = MousePosition - TankPawn->GetActorLocation();
+	//TurretTargetDirection.Normalize();
+	//UE_LOG(LogTemp, Warning, TEXT("Mouse X = % f, Y = % f, Z = % f"), MousePos.X, MousePos.Y, MousePos.Z);
+	//UE_LOG(LogTemp, Warning, TEXT("Loc X = % f, Y = % f, Z = % f"), TankPawn->GetTurretMeshLocation().X, TankPawn->GetTurretMeshLocation().Y, TankPawn->GetTurretMeshLocation().Z);
+	//UE_LOG(LogTemp, Warning, TEXT("Dir X = % f, Y = % f, Z = % f"), TurretTargetDirection1.X, TurretTargetDirection1.Y, TurretTargetDirection1.Z);
+	//UE_LOG(LogTemp, Error, TEXT("Mouse X = % f, Y = % f, Z = % f"), MousePosition.X, MousePosition.Y, MousePosition.Z);
+	//UE_LOG(LogTemp, Error, TEXT("Loc X = % f, Y = % f, Z = % f"), TankPawn->GetActorLocation().X, TankPawn->GetActorLocation().Y, TankPawn->GetActorLocation().Z);	
+	//UE_LOG(LogTemp, Error, TEXT("Dir X = % f, Y = % f, Z = % f"), TurretTargetDirection.X, TurretTargetDirection.Y, TurretTargetDirection.Z);
+	
+
+	FVector TurretTargetPosition = TankPawn->GetTurretMeshLocation() + TurretTargetDirection * 1000.f;
+
+	DrawDebugLine(GetWorld(), TankPawn->GetTurretMeshLocation(), TurretTargetPosition, FColor::Green, false, 0.1f, 0, 5.f);
 	TankPawn->SetTurretTargetPosition(TurretTargetPosition);
+
+	
+
 }
 
 void ATankPlayerController::BeginPlay()

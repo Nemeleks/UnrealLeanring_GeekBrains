@@ -37,6 +37,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
 	int32 MultiplyFireMaxCount = 3;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
+	float ProjectileFireRange = 7000.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
+	float TraceFireRange = 3000.f;
+
 private:
 	bool bIsReadyToFireProjectiles = false;
 	bool bIsReadyToFireTrace = false;

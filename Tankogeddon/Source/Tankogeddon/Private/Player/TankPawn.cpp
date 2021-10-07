@@ -24,11 +24,12 @@ ATankPawn::ATankPawn()
 	CannonSpawnPoint->SetupAttachment(TurretMeshComponent);
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
-	SpringArmComponent->SetupAttachment(RootComponent);
+	SpringArmComponent->SetupAttachment(TurretMeshComponent);
 	SpringArmComponent->bDoCollisionTest = false;
 	SpringArmComponent->bInheritPitch = false;
 	SpringArmComponent->bInheritYaw = false;
 	SpringArmComponent->bInheritRoll = false;
+	SpringArmComponent->SocketOffset.X = -4500;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
@@ -75,12 +76,12 @@ void ATankPawn::Tick(float DeltaTime)
 	//UE_LOG(LogTankogeddon, Warning, TEXT("CurrentForwardAxisValue = %f"), CurrentForwardAxisValue);
 	SetActorLocationAndRotation(NewLocation, NewRotation, true);
 
-	FRotator TurretTargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TurretTargetPosition);
+	FRotator TurretTargetRotation = UKismetMathLibrary::FindLookAtRotation(TurretMeshComponent->GetComponentLocation(), TurretTargetPosition);
 	FRotator TurrentCurrentRotation = TurretMeshComponent->GetComponentRotation();
 	TurretTargetRotation.Pitch = TurrentCurrentRotation.Pitch;
 	TurretTargetRotation.Roll = TurrentCurrentRotation.Roll;
-	//TurretMeshComponent->SetWorldRotation(FMath::Lerp(TurrentCurrentRotation, TurretTargetRotation, TurretRotationSmoothness * DeltaTime));
 	TurretMeshComponent->SetWorldRotation(FMath::RInterpTo(TurrentCurrentRotation, TurretTargetRotation, DeltaTime, TurretRotationSmoothness));
+	//TurretMeshComponent->SetWorldRotation(TurretTargetRotation);
 }
 
 void ATankPawn::MoveForward(float Amount)

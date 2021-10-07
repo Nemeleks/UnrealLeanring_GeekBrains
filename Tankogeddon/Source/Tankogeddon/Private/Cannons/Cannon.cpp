@@ -3,6 +3,8 @@
 
 #include "Cannons/Cannon.h"
 #include <Components/ArrowComponent.h>
+#include "DrawDebugHelpers.h"
+#include "Player/TankPawn.h"
 
 // Sets default values
 ACannon::ACannon()
@@ -48,14 +50,20 @@ void ACannon::Fire()
 
 void ACannon::ProjectilesFire()
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Green, TEXT("Fire - Projectile"));
+	FVector TraceStart = ProjectileSpawnPoint->GetComponentLocation();
+	FVector TraceEnd = TraceStart + ProjectileFireRange * ProjectileSpawnPoint->GetForwardVector();
+	DrawDebugLine(GetWorld(), TraceStart,TraceEnd , FColor::Red, false, 0.5f, 0, 7.f);
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Red, TEXT("Fire - Projectile"));
 }
 
 void ACannon::TraceFire()
 {
 
 	MultiplyFireCurrent += 1;
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Green, TEXT("Fire - Trace"));
+	FVector TraceStart = ProjectileSpawnPoint->GetComponentLocation();
+	FVector TraceEnd = TraceStart + TraceFireRange * ProjectileSpawnPoint->GetForwardVector();
+	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Purple, false, 0.5f, 0, 7.f);
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Purple, TEXT("Fire - Trace"));
 
 	if (MultiplyFireCurrent == MultiplyFireMaxCount)
 	{
