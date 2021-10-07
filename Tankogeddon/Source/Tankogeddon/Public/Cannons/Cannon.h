@@ -58,6 +58,8 @@ public:
 
 	int32 GetCurrentAmmo() const { return CurrentAmmo; };
 	ECannonType GetCannonType() const { return CannonType; };
+	FVector GetCannonLocation() const { return GetActorLocation(); };
+
 	void SetCannonType(ECannonType Type) { CannonType = Type; };
 
 protected:
