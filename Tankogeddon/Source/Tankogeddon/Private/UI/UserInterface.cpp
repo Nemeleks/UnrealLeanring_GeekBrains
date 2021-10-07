@@ -14,5 +14,24 @@ int32 UUserInterface::GetPlayerAmmo() const
 	if (!Cannon) return	0;
 
 	return Cannon->GetCurrentAmmo();
+}
 
+FString UUserInterface::GetCannonTypeName() const
+{
+	const auto Player = GetOwningPlayerPawn();
+	if (!Player) return "0";
+	const auto PlayerTank = Cast<ATankPawn>(Player);
+	const auto Cannon = PlayerTank->GetCannon();
+	if (!Cannon) return	"0";
+	FString CannonTypeName;
+
+	if (Cannon->GetCannonType() == ECannonType::FireProjectiles)
+	{
+		CannonTypeName = "Projectile Cannon";
+	}
+	else if (Cannon->GetCannonType() == ECannonType::FireTrace)
+	{
+		CannonTypeName = "Trace Cannon";
+	}
+	return CannonTypeName;
 }

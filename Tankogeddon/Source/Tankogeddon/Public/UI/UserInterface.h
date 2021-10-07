@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "GameStructs/GameStructs.h"
 #include "UserInterface.generated.h"
+
 
 /**
  * 
@@ -16,4 +18,7 @@ class TANKOGEDDON_API UUserInterface : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	int32 GetPlayerAmmo () const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	FString GetCannonTypeName() const;
 };
