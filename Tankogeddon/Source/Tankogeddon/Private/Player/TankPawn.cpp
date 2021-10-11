@@ -43,6 +43,7 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 	//SetupCannon(DefaultCannonClass);
 	SetupCannon(DefaultCannonClass, MaxAmmo);
+	CurrentCannonIndex = 0;
 }
 
 void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass, int32 AmmoAmount)
@@ -56,6 +57,7 @@ void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass, int32 Ammo
 		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		Cannon->AddAmmo(AmmoAmount);
 		Cannons.Add(Cannon);
+		//UE_LOG(LogTemp, Warning, TEXT("CurrentCannonIndex"))
 		CurrentCannonIndex = (CurrentCannonIndex + 1) % MaxCannons;
 	}
 	else
@@ -92,7 +94,7 @@ void ATankPawn::Tick(float DeltaTime)
 	FRotator TurrentCurrentRotation = TurretMeshComponent->GetComponentRotation();
 	TurretTargetRotation.Pitch = TurrentCurrentRotation.Pitch;
 	TurretTargetRotation.Roll = TurrentCurrentRotation.Roll;
-	TurretMeshComponent->SetWorldRotation(FMath::RInterpTo(TurrentCurrentRotation, TurretTargetRotation, DeltaTime, TurretRotationSmoothness));
+	TurretMeshComponent->SetWorldRotation(FMath::RInterpConstantTo(TurrentCurrentRotation, TurretTargetRotation, DeltaTime, TurretRotationSmoothness));
 }
 
 void ATankPawn::MoveForward(float Amount)

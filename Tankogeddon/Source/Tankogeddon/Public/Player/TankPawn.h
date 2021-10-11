@@ -108,6 +108,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	void SetupCannon(TSubclassOf<class ACannon> InCannonClass , int32 AmmoAmount);
 
+	UFUNCTION(BlueprintCallable, Category = "Turret")
+	TArray<ACannon*> GetCannons() const {return Cannons;};
+
 //	UFUNCTION(BlueprintCallable, Category = "Turret")
 //	TSubclassOf<class ACannon> GetCurrentCannon() const{ return Cannons[CurrentCannonIndex]; };
 };

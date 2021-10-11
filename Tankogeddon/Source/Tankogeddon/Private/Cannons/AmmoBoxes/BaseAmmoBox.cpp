@@ -25,17 +25,24 @@ void ABaseAmmoBox::OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp,
 	ATankPawn* PlayerPawn = Cast<ATankPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (OtherActor == PlayerPawn)
 	{
-		const auto Cannon = PlayerPawn->GetCannon();
-		if (!Cannon) return;
-		if (Cannon->GetClass() == CannonClass)
+		const auto Cannons = PlayerPawn->GetCannons();
+
+		ACannon* Cannon = nullptr;
+		for (auto i = 0; i < Cannons.Num(); ++i)
 		{
-			Cannon->AddAmmo(ImplementAmmo);
+			if (Cannons[i]->GetClass() == CannonClass)
+			{
+				Cannon = Cannons[i];
+			}
+		}
+		if(Cannon)
+		{
+			Cannon->AddAmmo(AmmoToAdd);
 		}
 		else
 		{
-			PlayerPawn->SetupCannon(CannonClass, ImplementAmmo);
+			PlayerPawn->SetupCannon(CannonClass, AmmoToAdd);
 		}
-		
 		Destroy();
 	}
 }
