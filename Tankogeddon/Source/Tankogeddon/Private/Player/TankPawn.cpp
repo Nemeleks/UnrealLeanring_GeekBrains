@@ -61,13 +61,13 @@ void ATankPawn::SetupCannon()
 void ATankPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CurrentForwardAxisValue = FMath::Lerp(CurrentForwardAxisValue, TargetForwardAxisValue, MoveSmoothness * DeltaTime);
+	CurrentForwardAxisValue = FMath::FInterpTo(CurrentForwardAxisValue, TargetForwardAxisValue, DeltaTime, MoveSmoothness);
 	FVector CurrentLocation = GetActorLocation();
 	FVector ForwardVector = GetActorForwardVector();
 	FVector NewLocation = CurrentLocation + ForwardVector * CurrentForwardAxisValue * MoveSpeed * DeltaTime;
 	
 
-	CurrentRightAxisValue = FMath::Lerp(CurrentRightAxisValue, TargetTurnAxisValue, RotationSmoothness * DeltaTime);
+	CurrentRightAxisValue = FMath::FInterpTo(CurrentRightAxisValue, TargetTurnAxisValue, DeltaTime, RotationSmoothness);
 	float YawRotation = RotationSpeed * CurrentRightAxisValue * DeltaTime;
 	FRotator CurrentRotation = GetActorRotation();
 	YawRotation = CurrentRotation.Yaw + YawRotation;
@@ -81,7 +81,6 @@ void ATankPawn::Tick(float DeltaTime)
 	TurretTargetRotation.Pitch = TurrentCurrentRotation.Pitch;
 	TurretTargetRotation.Roll = TurrentCurrentRotation.Roll;
 	TurretMeshComponent->SetWorldRotation(FMath::RInterpTo(TurrentCurrentRotation, TurretTargetRotation, DeltaTime, TurretRotationSmoothness));
-	//TurretMeshComponent->SetWorldRotation(TurretTargetRotation);
 }
 
 void ATankPawn::MoveForward(float Amount)
@@ -107,17 +106,25 @@ void ATankPawn::Fire()
 	}
 }
 
+void ATankPawn::AltFire()
+{
+	if (Cannon)
+	{
+		Cannon->AltFire();
+	}
+}
+
 void ATankPawn::ChangeCannon()
 {
 	if (!Cannon) return;
 
-	if (Cannon->GetCannonType() == ECannonType::FireProjectiles)
+	if (Cannon->GetCannonType() == ECannonType::ProjectileCannon)
 	{
-		Cannon->SetCannonType(ECannonType::FireTrace);
+		Cannon->SetCannonType(ECannonType::TraceCannon);
 	}
-	else if (Cannon->GetCannonType() == ECannonType::FireTrace)
+	else if (Cannon->GetCannonType() == ECannonType::TraceCannon)
 	{
-		Cannon->SetCannonType(ECannonType::FireProjectiles);
+		Cannon->SetCannonType(ECannonType::ProjectileCannon);
 	}
 }
 

@@ -25,11 +25,11 @@ FString UUserInterface::GetCannonTypeName() const
 	if (!Cannon) return	"0";
 	FString CannonTypeName;
 
-	if (Cannon->GetCannonType() == ECannonType::FireProjectiles)
+	if (Cannon->GetCannonType() == ECannonType::ProjectileCannon)
 	{
 		CannonTypeName = "Projectile Cannon";
 	}
-	else if (Cannon->GetCannonType() == ECannonType::FireTrace)
+	else if (Cannon->GetCannonType() == ECannonType::TraceCannon)
 	{
 		CannonTypeName = "Trace Cannon";
 	}

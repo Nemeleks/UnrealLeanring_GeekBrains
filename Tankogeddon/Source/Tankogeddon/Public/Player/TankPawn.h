@@ -87,10 +87,12 @@ public:
 	void Fire();
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
+	void AltFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Turret")
 	void ChangeCannon();
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	ACannon* GetCannon() const {return Cannon;};
 
-	//FVector GetTurretPosition() const { return TurretTargetPosition; };
 };

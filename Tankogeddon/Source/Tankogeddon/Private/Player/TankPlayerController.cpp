@@ -16,6 +16,7 @@ void ATankPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("MoveForward", this, &ATankPlayerController::MoveForward);
 	InputComponent->BindAxis("TurnTank", this, &ATankPlayerController::TurnTank);
 	InputComponent->BindAction("Fire", IE_Pressed, this, &ATankPlayerController::Fire);
+	InputComponent->BindAction("AltFire", IE_Pressed, this, &ATankPlayerController::AltFire);
 	InputComponent->BindAction("ChangeCannon", IE_Pressed, this, &ATankPlayerController::ChangeCannon);
 }
 
@@ -78,6 +79,11 @@ void ATankPlayerController::TurnTank(float Amount)
 void ATankPlayerController::Fire()
 {
 	TankPawn->Fire();
+}
+
+void ATankPlayerController::AltFire()
+{
+	TankPawn->AltFire();
 }
 
 void ATankPlayerController::ChangeCannon()

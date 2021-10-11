@@ -37,5 +37,7 @@ private:
 
 	void Fire();
 
+	void AltFire();
+
 	void ChangeCannon();
 };

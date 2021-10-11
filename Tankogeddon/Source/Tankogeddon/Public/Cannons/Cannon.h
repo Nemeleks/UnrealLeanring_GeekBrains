@@ -32,7 +32,7 @@ protected:
 	int32 MaxAmmo = 20;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
-	ECannonType CannonType = ECannonType::FireProjectiles;
+	ECannonType CannonType = ECannonType::ProjectileCannon;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
 	int32 MultiplyFireMaxCount = 3;
@@ -41,11 +41,14 @@ protected:
 	float ProjectileFireRange = 7000.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
-	float TraceFireRange = 3000.f;
+	float TraceFireRange = 5000.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "CannonType == ECannonType::FireProjectiles", EditConditionHides), Category = "FireParams")
+	TSubclassOf<class ABaseProjectile> ProjectileClass;
 
 private:
 	bool bIsReadyToFireProjectiles = false;
-	bool bIsReadyToFireTrace = false;
+	bool bIsReadyToAltFire = false;
 	bool bIsReadyToMultiplyFire = false;
 
 	FTimerHandle ProjectilesReloadTimerHandle;
@@ -61,6 +64,8 @@ public:
 	void Fire();
 	void ProjectilesFire();
 	void TraceFire();
+	void MultiplyFire();
+	void AltFire();
 
 	int32 GetCurrentAmmo() const { return CurrentAmmo; };
 	ECannonType GetCannonType() const { return CannonType; };
@@ -75,5 +80,5 @@ protected:
 
 private:
 	void ProjectilesReload();
-	void TraceReload();
+	void MultiplyFireReload();
 };
