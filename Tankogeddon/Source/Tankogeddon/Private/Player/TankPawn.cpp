@@ -54,8 +54,19 @@ void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass, int32 Ammo
 		Params.Owner = this;
 		Cannon = GetWorld()->SpawnActor <ACannon>(InCannonClass, Params);
 		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		Cannon->SetCurrentAmmo(AmmoAmount);
+		Cannon->AddAmmo(AmmoAmount);
 		Cannons.Add(Cannon);
+		CurrentCannonIndex = (CurrentCannonIndex + 1) % MaxCannons;
+	}
+	else
+	{
+		FActorSpawnParameters Params;
+		Params.Instigator = this;
+		Params.Owner = this;
+		Cannon = GetWorld()->SpawnActor <ACannon>(InCannonClass, Params);
+		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		Cannon->AddAmmo(AmmoAmount);
+		Cannons[CurrentCannonIndex] = Cannon;
 	}
 }
 
@@ -117,14 +128,13 @@ void ATankPawn::AltFire()
 
 void ATankPawn::ChangeCannon()
 {
-	if (!Cannon) return;
-	if (Cannon == Cannons[0])
-	{
-		Cannon = Cannons[1];
-	}
-	else
-	{
-		Cannon = Cannons[0];
-	}
+	if (Cannons.Num() <= 1) return;
+
+	Cannons[CurrentCannonIndex]->SetHidden(true);
+
+	CurrentCannonIndex = (CurrentCannonIndex + 1) % Cannons.Num();
+	Cannons[CurrentCannonIndex]->SetHidden(false);
+
+	Cannon = Cannons[CurrentCannonIndex];
 }
 

@@ -127,7 +127,7 @@ void ACannon::AltFire()
 	
 }
 
-void ACannon::SetCurrentAmmo(int32 Amount)
+void ACannon::AddAmmo(int32 Amount)
 {
 	CurrentAmmo += Amount;
 }

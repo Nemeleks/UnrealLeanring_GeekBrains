@@ -27,8 +27,15 @@ void ABaseAmmoBox::OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp,
 	{
 		const auto Cannon = PlayerPawn->GetCannon();
 		if (!Cannon) return;
-	
-		PlayerPawn->SetupCannon(CannonClass, ImplementAmmo);
+		if (Cannon->GetClass() == CannonClass)
+		{
+			Cannon->AddAmmo(ImplementAmmo);
+		}
+		else
+		{
+			PlayerPawn->SetupCannon(CannonClass, ImplementAmmo);
+		}
+		
 		Destroy();
 	}
 }

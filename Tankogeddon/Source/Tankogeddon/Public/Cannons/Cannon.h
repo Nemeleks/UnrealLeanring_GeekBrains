@@ -69,7 +69,7 @@ public:
 	int32 GetCurrentAmmo() const { return CurrentAmmo; };
 
 	UFUNCTION()
-	void SetCurrentAmmo(int32 Amount);
+	void AddAmmo(int32 Amount);
 	
 	UFUNCTION()
 	ECannonType GetCannonType() const { return CannonType; };
