@@ -42,29 +42,21 @@ void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	//SetupCannon(DefaultCannonClass);
-	Cannons.Add(DefaultCannonClass);
-	SetupCannon(Cannons[CurrentCannonIndex]);
-	if (!Cannon) return;
-	Cannon->SetCurrentAmmo(MaxAmmo);
-	
+	SetupCannon(DefaultCannonClass, MaxAmmo);
 }
 
-void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass)
+void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass, int32 AmmoAmount)
 {
-	if (Cannon)
-	{
-		Cannon->Destroy();
-	}
-
-	if (InCannonClass)
+	if (InCannonClass && Cannons.Num() < MaxCannons)
 	{
 		FActorSpawnParameters Params;
 		Params.Instigator = this;
 		Params.Owner = this;
 		Cannon = GetWorld()->SpawnActor <ACannon>(InCannonClass, Params);
 		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		Cannon->SetCurrentAmmo(AmmoAmount);
+		Cannons.Add(Cannon);
 	}
-
 }
 
 void ATankPawn::Tick(float DeltaTime)
@@ -126,5 +118,13 @@ void ATankPawn::AltFire()
 void ATankPawn::ChangeCannon()
 {
 	if (!Cannon) return;
+	if (Cannon == Cannons[0])
+	{
+		Cannon = Cannons[1];
+	}
+	else
+	{
+		Cannon = Cannons[0];
+	}
 }
 

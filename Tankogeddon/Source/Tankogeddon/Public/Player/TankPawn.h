@@ -68,7 +68,7 @@ private:
 
 	FVector TurretTargetPosition;
 
-	TArray<TSubclassOf<class ACannon>> Cannons;
+	TArray<ACannon*> Cannons;
 	TSubclassOf<class ACannon> CurrentCannon;
 	int32 CurrentCannonIndex = 0;
 
@@ -106,8 +106,8 @@ public:
 	ACannon* GetCannon() const {return Cannon;};
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
-	void SetupCannon(TSubclassOf<class ACannon> InCannonClass);
+	void SetupCannon(TSubclassOf<class ACannon> InCannonClass , int32 AmmoAmount);
 
-	UFUNCTION(BlueprintCallable, Category = "Turret")
-	TSubclassOf<class ACannon> GetCurrentCannon() const{ return Cannons[CurrentCannonIndex]; };
+//	UFUNCTION(BlueprintCallable, Category = "Turret")
+//	TSubclassOf<class ACannon> GetCurrentCannon() const{ return Cannons[CurrentCannonIndex]; };
 };
