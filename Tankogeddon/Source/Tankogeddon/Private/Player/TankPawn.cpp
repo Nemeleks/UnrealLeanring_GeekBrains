@@ -41,8 +41,12 @@ ATankPawn::ATankPawn()
 void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	SetupCannon(DefaultCannonClass);
+	//SetupCannon(DefaultCannonClass);
 	Cannons.Add(DefaultCannonClass);
+	SetupCannon(Cannons[CurrentCannonIndex]);
+	if (!Cannon) return;
+	Cannon->SetCurrentAmmo(MaxAmmo);
+	
 }
 
 void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass)
@@ -119,7 +123,7 @@ void ATankPawn::AltFire()
 	}
 }
 
-void ATankPawn::ChangeCannon(TSubclassOf<class ACannon> InCannonClass)
+void ATankPawn::ChangeCannon()
 {
 	if (!Cannon) return;
 }

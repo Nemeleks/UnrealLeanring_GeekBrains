@@ -127,6 +127,11 @@ void ACannon::AltFire()
 	
 }
 
+void ACannon::SetCurrentAmmo(int32 Amount)
+{
+	CurrentAmmo += Amount;
+}
+
 // Called when the game starts or when spawned
 void ACannon::BeginPlay()
 {
@@ -135,7 +140,7 @@ void ACannon::BeginPlay()
 	bIsReadyToFireProjectiles = true;
 	bIsReadyToAltFire = true;
 	bIsReadyToMultiplyFire = true;
-	CurrentAmmo = MaxAmmo;
+
 }
 
 void ACannon::EndPlay(EEndPlayReason::Type EndPlayReason)

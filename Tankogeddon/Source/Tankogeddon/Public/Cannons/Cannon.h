@@ -29,9 +29,6 @@ protected:
 	float Damage = 1.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
-	int32 MaxAmmo = 20;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
 	ECannonType CannonType = ECannonType::ProjectileCannon;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
@@ -61,14 +58,23 @@ public:
 	// Sets default values for this actor's properties
 	ACannon();
 
+	
 	void Fire();
 	void ProjectilesFire();
 	void TraceFire();
 	void MultiplyFire();
 	void AltFire();
 
+	UFUNCTION()
 	int32 GetCurrentAmmo() const { return CurrentAmmo; };
+
+	UFUNCTION()
+	void SetCurrentAmmo(int32 Amount);
+	
+	UFUNCTION()
 	ECannonType GetCannonType() const { return CannonType; };
+
+	UFUNCTION()
 	FVector GetCannonLocation() const { return GetActorLocation(); };
 
 	void SetCannonType(ECannonType Type) { CannonType = Type; };
