@@ -41,21 +41,26 @@ ATankPawn::ATankPawn()
 void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	SetupCannon();
+	SetupCannon(DefaultCannonClass);
+	Cannons.Add(DefaultCannonClass);
 }
 
-void ATankPawn::SetupCannon()
+void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass)
 {
 	if (Cannon)
 	{
 		Cannon->Destroy();
 	}
 
-	FActorSpawnParameters Params;
-	Params.Instigator = this;
-	Params.Owner = this;
-	Cannon = GetWorld()->SpawnActor <ACannon>(DefaultCannonClass, Params);
-	Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	if (InCannonClass)
+	{
+		FActorSpawnParameters Params;
+		Params.Instigator = this;
+		Params.Owner = this;
+		Cannon = GetWorld()->SpawnActor <ACannon>(InCannonClass, Params);
+		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	}
+
 }
 
 void ATankPawn::Tick(float DeltaTime)
@@ -114,17 +119,8 @@ void ATankPawn::AltFire()
 	}
 }
 
-void ATankPawn::ChangeCannon()
+void ATankPawn::ChangeCannon(TSubclassOf<class ACannon> InCannonClass)
 {
 	if (!Cannon) return;
-
-	if (Cannon->GetCannonType() == ECannonType::ProjectileCannon)
-	{
-		Cannon->SetCannonType(ECannonType::TraceCannon);
-	}
-	else if (Cannon->GetCannonType() == ECannonType::TraceCannon)
-	{
-		Cannon->SetCannonType(ECannonType::ProjectileCannon);
-	}
 }
 

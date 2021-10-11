@@ -71,6 +71,10 @@ void ACannon::TraceFire()
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, TraceParams))
 	{
 		DrawDebugLine(GetWorld(), TraceStart, HitResult.ImpactPoint, FColor::Red, false, 0.5f, 0, 5.f);
+		if (HitResult.Actor.IsValid() && HitResult.Component->GetCollisionObjectType() == ECC_Destructible)
+		{
+			HitResult.Actor->Destroy();
+		}
 	}
 	else
 	{

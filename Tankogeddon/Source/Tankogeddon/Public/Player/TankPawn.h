@@ -53,6 +53,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	TSubclassOf<class ACannon> DefaultCannonClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
+	int32 MaxCannons = 2;
+
 private:
 	float TargetForwardAxisValue = 0.f;
 	float TargetTurnAxisValue = 0.f;
@@ -62,10 +65,13 @@ private:
 
 	FVector TurretTargetPosition;
 
+	TArray<TSubclassOf<class ACannon>> Cannons;
+	int32 CurrentCannonIndex = 0;
+
 	UPROPERTY()
 	class ACannon* Cannon = nullptr;
 
-	void SetupCannon();
+
 
 public:	
 	// Called every frame
@@ -90,9 +96,11 @@ public:
 	void AltFire();
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
-	void ChangeCannon();
+	void ChangeCannon(TSubclassOf<class ACannon> InCannonClass);
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	ACannon* GetCannon() const {return Cannon;};
 
+	UFUNCTION(BlueprintCallable, Category = "Turret")
+	void SetupCannon(TSubclassOf<class ACannon> InCannonClass);
 };
