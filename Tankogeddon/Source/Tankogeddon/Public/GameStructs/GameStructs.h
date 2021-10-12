@@ -11,3 +11,18 @@ enum class ECannonType : uint8
 	TraceCannon = 1 UMETA(Display = "Fire Trace"),
 	Machinegun = 2 UMETA(Display = "Machinegun")
 };
+
+USTRUCT()
+struct FDamageData
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	float DamageAmount;
+
+	UPROPERTY()
+	class AActor* Instigator;
+
+	UPROPERTY()
+	class AActor* DamageMaker;
+};

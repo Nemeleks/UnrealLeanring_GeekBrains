@@ -3,6 +3,7 @@
 
 #include "Cannons/Projectiles/BaseProjectile.h"
 #include "Subsystems/ActolPoolSubsystem.h"
+#include "InterfaceClasses/Damageable.h"
 
 // Sets default values
 ABaseProjectile::ABaseProjectile()
@@ -48,9 +49,23 @@ void ABaseProjectile::OnComponentHit(class UPrimitiveComponent* HitComponent, cl
 {
 	UE_LOG(LogTemp, Warning, TEXT("Projectile %s collided with %s"), *GetName(), *OtherActor->GetName());
 
+	if (OtherActor == GetInstigator())
+	{
+		Stop();
+		return;
+	}
+
 	if (OtherActor && OtherComp && OtherComp->GetCollisionObjectType() == ECC_Destructible)
 	{
 		OtherActor->Destroy();
+	}
+	else if (IDamageable* Damageable = Cast<IDamageable>(OtherActor))
+	{
+		FDamageData DamageData;
+		DamageData.DamageAmount = Damage;
+		DamageData.Instigator = GetInstigator();
+		DamageData.DamageMaker = this;
+		Damageable->TakeDamage(DamageData);
 	}
 	Stop ();
 }

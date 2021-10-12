@@ -62,6 +62,7 @@ void ACannon::ProjectilesFire()
 	ABaseProjectile* Projectile = Cast<ABaseProjectile>(Pool->MoveActorFromPool(ProjectileClass, SpawnTransform));
 	if (Projectile)
 	{
+		Projectile->SetInstigator(GetInstigator());
 		Projectile-> Start();
 	}
 }

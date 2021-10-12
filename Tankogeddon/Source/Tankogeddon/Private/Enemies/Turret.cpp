@@ -100,3 +100,8 @@ void ATurret::Tick(float DeltaTime)
 	Targeting();
 }
 
+void ATurret::TakeDamage(const FDamageData& DamageData)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage: %f"), *GetName(), DamageData.DamageAmount);
+}
+
