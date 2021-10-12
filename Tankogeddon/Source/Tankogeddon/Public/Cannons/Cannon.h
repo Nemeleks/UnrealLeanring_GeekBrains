@@ -40,17 +40,30 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
 	float TraceFireRange = 5000.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "CannonType == ECannonType::FireProjectiles", EditConditionHides), Category = "FireParams")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
 	TSubclassOf<class ABaseProjectile> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FireParams")
+	float FireRateMachinegun = 0.5f;
 
 private:
 	bool bIsReadyToFireProjectiles = false;
-	bool bIsReadyToAltFire = false;
 	bool bIsReadyToMultiplyFire = false;
 
+	bool bIsReadyToFireTrace = false;
+
+	bool bIsReadyToMachinegunFire = false;
+	bool bIsReadyToIncreaseSpeedMachinegun = false;
+
 	FTimerHandle ProjectilesReloadTimerHandle;
+	FTimerHandle MultiplyFireReloadTimerHandle;
+	FTimerHandle MultiplyFireTimerHandle;
+
 	FTimerHandle TraceReloadTimerHandle;
-	FTimerHandle TraceFireTimerHandle;
+
+	FTimerHandle MachinegunReloadTimerHandle;
+	FTimerHandle MachinegunIncreaseSpeedTimerHandle;
+	FTimerHandle MachinegunIncreaseSpeedReloadTimerHandle;
 
 	int32 CurrentAmmo = 0;
 	int32 MultiplyFireCurrent = 0;
@@ -87,4 +100,8 @@ protected:
 private:
 	void ProjectilesReload();
 	void MultiplyFireReload();
+	void TraceReload();
+	void MachinegunReload();
+	void MachinegunIncreaseSpeed();
+	void MachinegunIncreaseSpeedReload();
 };

@@ -5,6 +5,7 @@
 #include "Player/TankPawn.h"
 #include "DrawDebugHelpers.h"
 #include "Cannons/Cannon.h"
+#include "Subsystems/ActolPoolSubsystem.h"
 
 ATankPlayerController::ATankPlayerController()
 {
@@ -89,5 +90,10 @@ void ATankPlayerController::AltFire()
 void ATankPlayerController::ChangeCannon()
 {
 	TankPawn->ChangeCannon();
+}
+
+void ATankPlayerController::DumpActorPoolStats()
+{
+	GetWorld()->GetSubsystem<UActolPoolSubsystem>()->DumpPoolStats();
 }
 

@@ -30,6 +30,7 @@ public:
 	ABaseProjectile();
 
 	void Start();
+	void Stop();
 
 protected:
 	UFUNCTION()

@@ -6,6 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "Player/TankPawn.h"
 #include "Cannons/Projectiles/BaseProjectile.h"
+#include "Subsystems/ActolPoolSubsystem.h"
 
 // Sets default values
 ACannon::ACannon()
@@ -36,22 +37,29 @@ void ACannon::Fire()
 	}
 	else if (CannonType == ECannonType::TraceCannon)
 	{
-		if (!bIsReadyToFireProjectiles) return;
+		if (!bIsReadyToFireTrace) return;
 		CurrentAmmo -= 1;
-		bIsReadyToFireProjectiles = false;
+		bIsReadyToFireTrace = false;
 		TraceFire();
-		GetWorld()->GetTimerManager().SetTimer(ProjectilesReloadTimerHandle, this, &ACannon::ProjectilesReload, 1.f / FireRate, false);
+		GetWorld()->GetTimerManager().SetTimer(TraceReloadTimerHandle, this, &ACannon::TraceReload, 2.f / FireRate, false);
 	}
 	else if (CannonType == ECannonType::Machinegun)
 	{
-
+		if (!bIsReadyToMachinegunFire) return;
+		CurrentAmmo -= 1;
+		bIsReadyToMachinegunFire = false;
+		ProjectilesFire();
+		GetWorld()->GetTimerManager().SetTimer(MachinegunReloadTimerHandle, this, &ACannon::MachinegunReload, 1.f / FireRateMachinegun, false);
 	}
 }
 	
 
 void ACannon::ProjectilesFire()
 {
-	ABaseProjectile* Projectile = GetWorld()->SpawnActor<ABaseProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Red, TEXT("Fire - Projectile"));
+	//ABaseProjectile* Projectile = GetWorld()->SpawnActor<ABaseProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Red, TEXT("Fire - Projectile"));
+	UActolPoolSubsystem* Pool = GetWorld()->GetSubsystem<UActolPoolSubsystem>();
+	FTransform SpawnTransform(ProjectileSpawnPoint->GetComponentRotation(), ProjectileSpawnPoint->GetComponentLocation(), FVector::OneVector);
+	ABaseProjectile* Projectile = Cast<ABaseProjectile>(Pool->MoveActorFromPool(ProjectileClass, SpawnTransform));
 	if (Projectile)
 	{
 		Projectile-> Start();
@@ -87,7 +95,7 @@ void ACannon::MultiplyFire()
 	MultiplyFireCurrent += 1;
 	if (MultiplyFireCurrent == MultiplyFireMaxCount)
 	{
-		GetWorld()->GetTimerManager().ClearTimer(TraceFireTimerHandle);
+		GetWorld()->GetTimerManager().ClearTimer(MultiplyFireTimerHandle);
 	}
 	ABaseProjectile* Projectile = GetWorld()->SpawnActor<ABaseProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Red, TEXT("Fire - Projectile"));
@@ -106,14 +114,13 @@ void ACannon::AltFire()
 	{
 		if (!bIsReadyToFireProjectiles) return;
 		CurrentAmmo -= 1;
-		//bIsReadyToAltFire = false;
 		bIsReadyToFireProjectiles = false;
 		if (bIsReadyToMultiplyFire)
 		{
 			bIsReadyToMultiplyFire = false;
-			GetWorld()->GetTimerManager().SetTimer(TraceFireTimerHandle, this, &ACannon::MultiplyFire, 0.3f / FireRate, true);
+			GetWorld()->GetTimerManager().SetTimer(MultiplyFireTimerHandle, this, &ACannon::MultiplyFire, 0.3f / FireRate, true);
 		}
-		GetWorld()->GetTimerManager().SetTimer(TraceReloadTimerHandle, this, &ACannon::MultiplyFireReload, 3.f / FireRate, false);
+		GetWorld()->GetTimerManager().SetTimer(MultiplyFireReloadTimerHandle, this, &ACannon::MultiplyFireReload, 3.f / FireRate, false);
 	}
 	else if (CannonType == ECannonType::TraceCannon)
 	{
@@ -121,7 +128,10 @@ void ACannon::AltFire()
 	}
 	else if (CannonType == ECannonType::Machinegun)
 	{
-
+		if (!bIsReadyToIncreaseSpeedMachinegun) return;
+		bIsReadyToIncreaseSpeedMachinegun = false;
+		FireRateMachinegun /= 2;
+		GetWorld()->GetTimerManager().SetTimer(MachinegunIncreaseSpeedTimerHandle, this, &ACannon::MachinegunIncreaseSpeed, 3.f, false);
 	}
 	
 }
@@ -137,8 +147,10 @@ void ACannon::BeginPlay()
 	Super::BeginPlay();
 	
 	bIsReadyToFireProjectiles = true;
-	bIsReadyToAltFire = true;
+	bIsReadyToFireTrace = true;
 	bIsReadyToMultiplyFire = true;
+	bIsReadyToMachinegunFire = true;
+	bIsReadyToIncreaseSpeedMachinegun = true;
 
 }
 
@@ -155,9 +167,28 @@ void ACannon::ProjectilesReload()
 
 void ACannon::MultiplyFireReload()
 {
-	//bIsReadyToAltFire = true;
 	bIsReadyToFireProjectiles = true;
 	bIsReadyToMultiplyFire = true;
 	MultiplyFireCurrent = 0;
 }
 
+void ACannon::TraceReload()
+{
+	bIsReadyToFireTrace = true;
+}
+
+void ACannon::MachinegunReload()
+{
+	bIsReadyToMachinegunFire = true;
+}
+
+void ACannon::MachinegunIncreaseSpeed()
+{
+	FireRateMachinegun *= 2;
+	GetWorld()->GetTimerManager().SetTimer(MachinegunIncreaseSpeedReloadTimerHandle, this, &ACannon::MachinegunIncreaseSpeed, 3.f, false);
+}
+
+void ACannon::MachinegunIncreaseSpeedReload()
+{
+	bIsReadyToIncreaseSpeedMachinegun = true;
+}

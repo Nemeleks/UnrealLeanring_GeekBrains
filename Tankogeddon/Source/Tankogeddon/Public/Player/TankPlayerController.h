@@ -40,4 +40,7 @@ private:
 	void AltFire();
 
 	void ChangeCannon();
+
+	UFUNCTION(exec)
+	void DumpActorPoolStats();
 };
