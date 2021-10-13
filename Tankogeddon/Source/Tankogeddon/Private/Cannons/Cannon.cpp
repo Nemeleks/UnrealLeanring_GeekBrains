@@ -7,6 +7,7 @@
 #include "Player/TankPawn.h"
 #include "Cannons/Projectiles/BaseProjectile.h"
 #include "Subsystems/ActolPoolSubsystem.h"
+#include "InterfaceClasses/Damageable.h"
 
 // Sets default values
 ACannon::ACannon()
@@ -82,6 +83,14 @@ void ACannon::TraceFire()
 		if (HitResult.Actor.IsValid() && HitResult.Component->GetCollisionObjectType() == ECC_Destructible)
 		{
 			HitResult.Actor->Destroy();
+		}
+		else if (IDamageable* Damageable = Cast<IDamageable>(HitResult.Actor))
+		{
+			FDamageData DamageData;
+			DamageData.DamageAmount = Damage;
+			DamageData.Instigator = GetInstigator();
+			DamageData.DamageMaker = this;
+			Damageable->TakeDamage(DamageData);
 		}
 	}
 	else

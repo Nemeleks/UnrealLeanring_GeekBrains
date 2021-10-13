@@ -34,6 +34,9 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 		class UArrowComponent* CannonSpawnPoint;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UHealthComponent* HealthComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 		float MoveSpeed = 1000.f;
 
@@ -58,6 +61,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	int32 MaxAmmo = 20;
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Health")
+		void OnHealthChanged(float DamageAmount);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Health")
+		void OnDie();
 
 private:
 	float TargetForwardAxisValue = 0.f;

@@ -7,6 +7,7 @@
 #include <Components/BoxComponent.h>
 #include "Cannons/Cannon.h"
 #include <Kismet/KismetMathLibrary.h>
+#include "Components/HealthComponent.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -26,6 +27,10 @@ ATurret::ATurret()
 
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HitCollider"));
 	HitCollider->SetupAttachment(TurretMesh);
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->OnHealthChanged.AddDynamic(this, &ATurret::OnHealthChanged);
+	HealthComponent->OnDie.AddDynamic(this, &ATurret::OnDie);
 }
 
 // Called when the game starts or when spawned
@@ -92,6 +97,16 @@ void ATurret::Fire()
 	Cannon->Fire();
 }
 
+void ATurret::OnHealthChanged_Implementation(float DamageAmount)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage: %f"), *GetName(), DamageAmount);
+}
+
+void ATurret::OnDie_Implementation()
+{
+	Destroy();
+}
+
 // Called every frame
 void ATurret::Tick(float DeltaTime)
 {
@@ -102,6 +117,6 @@ void ATurret::Tick(float DeltaTime)
 
 void ATurret::TakeDamage(const FDamageData& DamageData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage: %f"), *GetName(), DamageData.DamageAmount);
+	HealthComponent->TakeDamage(DamageData);
 }
 

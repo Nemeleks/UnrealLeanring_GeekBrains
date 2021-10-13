@@ -12,7 +12,7 @@ enum class ECannonType : uint8
 	Machinegun = 2 UMETA(Display = "Machinegun")
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FDamageData
 {
 	GENERATED_BODY()

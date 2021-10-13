@@ -8,6 +8,7 @@
 #include "Tankogeddon/Tankogeddon.h"
 #include "Cannons/Cannon.h"
 #include <Components/ArrowComponent.h>
+#include "Components/HealthComponent.h"
 
 // Sets default values
 ATankPawn::ATankPawn()
@@ -34,8 +35,9 @@ ATankPawn::ATankPawn()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
-
-
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->OnDie.AddDynamic(this, &ATankPawn::OnDie);
+	HealthComponent->OnHealthChanged.AddDynamic(this, &ATankPawn::OnHealthChanged);
 }
 
 void ATankPawn::BeginPlay()
@@ -44,6 +46,16 @@ void ATankPawn::BeginPlay()
 	//SetupCannon(DefaultCannonClass);
 	SetupCannon(DefaultCannonClass, MaxAmmo);
 	CurrentCannonIndex = 0;
+}
+
+void ATankPawn::OnHealthChanged_Implementation(float DamageAmount)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s taked damage: %f"), *GetName(), DamageAmount);
+}
+
+void ATankPawn::OnDie_Implementation()
+{
+	Destroy();
 }
 
 void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass, int32 AmmoAmount)
