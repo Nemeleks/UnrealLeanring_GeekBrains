@@ -63,8 +63,10 @@ void ACannon::ProjectilesFire()
 	ABaseProjectile* Projectile = Cast<ABaseProjectile>(Pool->MoveActorFromPool(ProjectileClass, SpawnTransform));
 	if (Projectile)
 	{
+		Projectile->GetScoreOnKill.AddDynamic(this, &ACannon::GetScoreOnKill);
 		Projectile->SetInstigator(GetInstigator());
 		Projectile-> Start();
+
 	}
 }
 
@@ -111,6 +113,8 @@ void ACannon::MultiplyFire()
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Red, TEXT("Fire - Projectile"));
 	if (Projectile)
 	{
+		Projectile->GetScoreOnKill.AddDynamic(this, &ACannon::GetScoreOnKill);
+		Projectile->SetInstigator(GetInstigator());
 		Projectile->Start();
 	}
 
@@ -144,6 +148,11 @@ void ACannon::AltFire()
 		GetWorld()->GetTimerManager().SetTimer(MachinegunIncreaseSpeedTimerHandle, this, &ACannon::MachinegunIncreaseSpeed, 3.f, false);
 	}
 	
+}
+
+void ACannon::GetScoreOnKill(float Amount)
+{
+	ScoreOnKill.Broadcast(Amount);
 }
 
 void ACannon::AddAmmo(int32 Amount)

@@ -104,7 +104,6 @@ void ATurret::OnHealthChanged_Implementation(float DamageAmount)
 
 void ATurret::OnDie_Implementation()
 {
-
 	Destroy();
 }
 

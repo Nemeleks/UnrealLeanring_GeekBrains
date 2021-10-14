@@ -47,6 +47,7 @@ void ATankPawn::BeginPlay()
 	//SetupCannon(DefaultCannonClass);
 	SetupCannon(DefaultCannonClass, MaxAmmo);
 	CurrentCannonIndex = 0;
+	Cannon->ScoreOnKill.AddDynamic(this, &ATankPawn::AddScoreForKill);
 }
 
 void ATankPawn::OnHealthChanged_Implementation(float DamageAmount)

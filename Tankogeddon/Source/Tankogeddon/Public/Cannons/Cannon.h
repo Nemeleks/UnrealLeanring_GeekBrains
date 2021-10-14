@@ -7,6 +7,8 @@
 #include "GameStructs/GameStructs.h"
 #include "Cannon.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreOnKill, float, Amount);
+
 UCLASS()
 class TANKOGEDDON_API ACannon : public AActor
 {
@@ -71,6 +73,8 @@ public:
 	// Sets default values for this actor's properties
 	ACannon();
 
+	UPROPERTY()
+	FScoreOnKill ScoreOnKill;
 	
 	void Fire();
 	void ProjectilesFire();
@@ -80,6 +84,9 @@ public:
 
 	UFUNCTION()
 	int32 GetCurrentAmmo() const { return CurrentAmmo; };
+
+	UFUNCTION()
+	void GetScoreOnKill(float Amount);
 
 	UFUNCTION()
 	void AddAmmo(int32 Amount);

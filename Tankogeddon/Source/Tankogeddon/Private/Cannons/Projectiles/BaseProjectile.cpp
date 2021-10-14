@@ -32,6 +32,7 @@ void ABaseProjectile::Start()
 
 void ABaseProjectile::Stop()
 {
+	GetScoreOnKill.Clear();
 	PrimaryActorTick.SetTickFunctionEnable(false);
 	Mesh->SetHiddenInGame(true);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -43,7 +44,7 @@ void ABaseProjectile::Stop()
 	}
 	else
 	{
-		Destroy();
+		Destroy();		
 	}
 }
 
@@ -71,7 +72,7 @@ void ABaseProjectile::OnComponentHit(class UPrimitiveComponent* HitComponent, cl
 
 		if (IScorable* Scorable = Cast<IScorable>(OtherActor))
 		{
-			if (OtherActor->Destroy())
+			if (OtherActor->IsActorBeingDestroyed())
 			{
 				if (GetScoreOnKill.IsBound())
 				{

@@ -40,7 +40,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 		float MoveSpeed = 1000.f;
 
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Targeting")
 		float RotationSpeed = 100.f;
 
