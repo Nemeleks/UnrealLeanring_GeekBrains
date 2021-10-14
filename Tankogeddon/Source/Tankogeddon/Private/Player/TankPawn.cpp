@@ -38,6 +38,7 @@ ATankPawn::ATankPawn()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDie.AddDynamic(this, &ATankPawn::OnDie);
 	HealthComponent->OnHealthChanged.AddDynamic(this, &ATankPawn::OnHealthChanged);
+
 }
 
 void ATankPawn::BeginPlay()
@@ -82,6 +83,11 @@ void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass, int32 Ammo
 		Cannon->AddAmmo(AmmoAmount);
 		Cannons[CurrentCannonIndex] = Cannon;
 	}
+}
+
+void ATankPawn::AddScoreForKill(float Amount)
+{
+	CurrentScore += Amount;
 }
 
 void ATankPawn::Tick(float DeltaTime)

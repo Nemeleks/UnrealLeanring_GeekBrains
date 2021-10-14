@@ -21,4 +21,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	FString GetCannonTypeName() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	float GetCurrentScore() const;
 };

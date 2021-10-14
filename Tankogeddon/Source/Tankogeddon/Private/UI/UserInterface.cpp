@@ -35,3 +35,11 @@ FString UUserInterface::GetCannonTypeName() const
 	}
 	return CannonTypeName;
 }
+
+float UUserInterface::GetCurrentScore() const
+{
+	const auto Player = GetOwningPlayerPawn();
+	if (!Player) return 0;
+	const auto PlayerTank = Cast<ATankPawn>(Player);
+	return PlayerTank->GetCurrentScore();
+}

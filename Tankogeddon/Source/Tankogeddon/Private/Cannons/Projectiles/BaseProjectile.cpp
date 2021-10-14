@@ -4,6 +4,8 @@
 #include "Cannons/Projectiles/BaseProjectile.h"
 #include "Subsystems/ActolPoolSubsystem.h"
 #include "InterfaceClasses/Damageable.h"
+#include "InterfaceClasses/Scorable.h"
+#include "Player/TankPawn.h"
 
 // Sets default values
 ABaseProjectile::ABaseProjectile()
@@ -66,6 +68,17 @@ void ABaseProjectile::OnComponentHit(class UPrimitiveComponent* HitComponent, cl
 		DamageData.Instigator = GetInstigator();
 		DamageData.DamageMaker = this;
 		Damageable->TakeDamage(DamageData);
+
+		if (IScorable* Scorable = Cast<IScorable>(OtherActor))
+		{
+			if (OtherActor->Destroy())
+			{
+				if (GetScoreOnKill.IsBound())
+				{
+					GetScoreOnKill.Broadcast(Scorable->GetScoreForKill());
+				}
+			}
+		}
 	}
 	Stop ();
 }

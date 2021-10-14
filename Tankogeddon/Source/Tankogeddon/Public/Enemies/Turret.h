@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InterfaceClasses/Damageable.h"
+#include "InterfaceClasses/Scorable.h"
 #include "Turret.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATurret : public AActor, public IDamageable
+class TANKOGEDDON_API ATurret : public AActor, public IDamageable, public IScorable
 {
 	GENERATED_BODY()
 	
@@ -73,7 +74,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	float ScoreForKill = 10;
+
 public:
 	void TakeDamage(const FDamageData& DamageData) override;
-
+	float GetScoreForKill() override { return ScoreForKill; };
 };

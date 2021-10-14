@@ -75,6 +75,8 @@ private:
 	float CurrentForwardAxisValue = 0.f;
 	float CurrentRightAxisValue = 0.f;
 
+	float CurrentScore = 0.f;
+
 	FVector TurretTargetPosition;
 
 	TArray<ACannon*> Cannons;
@@ -120,6 +122,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	TArray<ACannon*> GetCannons() const {return Cannons;};
 
-//	UFUNCTION(BlueprintCallable, Category = "Turret")
-//	TSubclassOf<class ACannon> GetCurrentCannon() const{ return Cannons[CurrentCannonIndex]; };
+	UFUNCTION(BlueprintCallable, Category = "Scoring")
+	void AddScoreForKill(float Amount);
+
+	UFUNCTION(BlueprintCallable, Category = "Scoring")
+		float GetCurrentScore() const { return CurrentScore; };
 };

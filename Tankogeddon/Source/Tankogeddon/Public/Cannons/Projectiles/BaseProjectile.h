@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseProjectile.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGetScoreOnKill, float, Amount);
+
 UCLASS()
 class TANKOGEDDON_API ABaseProjectile : public AActor
 {
@@ -24,6 +26,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 	float Damage = 1.f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Scoring")
+	float Score = 10.f;
 
 public:
 	// Sets default values for this actor's properties
@@ -31,6 +35,9 @@ public:
 
 	void Start();
 	void Stop();
+
+	UPROPERTY()
+	FGetScoreOnKill GetScoreOnKill;
 
 protected:
 	UFUNCTION()
