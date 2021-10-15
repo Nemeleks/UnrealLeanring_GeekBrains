@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "BaseClasses/BasePawn.h"
 #include "TankPawn.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATankPawn : public APawn
+class TANKOGEDDON_API ATankPawn : public ABasePawn
 {
 	GENERATED_BODY()
 
@@ -20,22 +21,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-		class UStaticMeshComponent* TankMeshComponent;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-		class UStaticMeshComponent* TurretMeshComponent;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 		class USpringArmComponent* SpringArmComponent;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 		class UCameraComponent* CameraComponent;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		class UArrowComponent* CannonSpawnPoint;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UHealthComponent* HealthComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 		float MoveSpeed = 1000.f;
@@ -52,20 +41,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	float TurretRotationSmoothness = 5.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
-	TSubclassOf<class ACannon> DefaultCannonClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
-	int32 MaxCannons = 2;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
-	int32 MaxAmmo = 20;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Health")
-		void OnHealthChanged(float DamageAmount);
-
-	UFUNCTION(BlueprintNativeEvent, Category = "Health")
-		void OnDie();
 
 private:
 	float TargetForwardAxisValue = 0.f;
@@ -78,13 +56,8 @@ private:
 
 	FVector TurretTargetPosition;
 
-	TArray<ACannon*> Cannons;
+
 	TSubclassOf<class ACannon> CurrentCannon;
-	int32 CurrentCannonIndex = 0;
-
-	UPROPERTY()
-	class ACannon* Cannon = nullptr;
-
 
 
 public:	
@@ -103,8 +76,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	FVector GetTurretMeshLocation() const { return TurretMeshComponent->GetComponentLocation(); };
 
-	UFUNCTION(BlueprintCallable, Category = "Turret")
-	void Fire();
+	//void Fire() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	void AltFire();
@@ -116,14 +88,11 @@ public:
 	ACannon* GetCannon() const {return Cannon;};
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
-	void SetupCannon(TSubclassOf<class ACannon> InCannonClass , int32 AmmoAmount);
-
-	UFUNCTION(BlueprintCallable, Category = "Turret")
 	TArray<ACannon*> GetCannons() const {return Cannons;};
 
 	UFUNCTION(BlueprintCallable, Category = "Scoring")
 	void AddScoreForKill(float Amount);
 
 	UFUNCTION(BlueprintCallable, Category = "Scoring")
-		float GetCurrentScore() const { return CurrentScore; };
+	float GetCurrentScore() const { return CurrentScore; };
 };

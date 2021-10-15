@@ -12,37 +12,15 @@
 // Sets default values
 ATurret::ATurret()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+ 
 	PrimaryActorTick.TickInterval = 0.005f;
 
-	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
-	SetRootComponent(BodyMesh);
-
-	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
-	TurretMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-	CannonSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSpawnPoint"));
-	CannonSpawnPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
-
-	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HitCollider"));
-	HitCollider->SetupAttachment(TurretMesh);
-
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
-	HealthComponent->OnHealthChanged.AddDynamic(this, &ATurret::OnHealthChanged);
-	HealthComponent->OnDie.AddDynamic(this, &ATurret::OnDie);
 }
 
 // Called when the game starts or when spawned
 void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	FActorSpawnParameters Params;
-	Params.Owner = this;
-	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, Params);
-	Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-	Cannon->AddAmmo(StartAmmo);
 
 	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
@@ -72,10 +50,10 @@ void ATurret::Targeting()
 void ATurret::RotateToPlayer()
 {
 	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), PlayerPawn->GetActorLocation());
-	FRotator CurrentRotation = TurretMesh->GetComponentRotation();
+	FRotator CurrentRotation = TurretMeshComponent->GetComponentRotation();
 	TargetRotation.Pitch = CurrentRotation.Pitch;
 	TargetRotation.Roll = CurrentRotation.Roll;
-	TurretMesh->SetWorldRotation(FMath::RInterpConstantTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), TargetingSpeed));
+	TurretMeshComponent->SetWorldRotation(FMath::RInterpConstantTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), TargetingSpeed));
 }
 
 bool ATurret::IsPlayerInRange()
@@ -85,27 +63,13 @@ bool ATurret::IsPlayerInRange()
 
 bool ATurret::CanFire()
 {
-	FVector TargetingDirection = TurretMesh->GetForwardVector();
+	FVector TargetingDirection = TurretMeshComponent->GetForwardVector();
 	FVector DirectionToPlayer = PlayerPawn->GetActorLocation() - GetActorLocation();
 	DirectionToPlayer.Normalize();
 	float AimAngle = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(TargetingDirection, DirectionToPlayer)));
 	return AimAngle <= Accuracy;
 }
 
-void ATurret::Fire()
-{
-	Cannon->Fire();
-}
-
-void ATurret::OnHealthChanged_Implementation(float DamageAmount)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Turret %s taked damage: %f"), *GetName(), DamageAmount);
-}
-
-void ATurret::OnDie_Implementation()
-{
-	Destroy();
-}
 
 // Called every frame
 void ATurret::Tick(float DeltaTime)

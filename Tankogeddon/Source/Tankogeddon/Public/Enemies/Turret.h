@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "InterfaceClasses/Damageable.h"
 #include "InterfaceClasses/Scorable.h"
+#include "BaseClasses/BasePawn.h"
 #include "Turret.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATurret : public AActor, public IDamageable, public IScorable
+class TANKOGEDDON_API ATurret : public ABasePawn, public IDamageable, public IScorable
 {
 	GENERATED_BODY()
 	
@@ -22,29 +23,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UStaticMeshComponent* BodyMesh;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UStaticMeshComponent* TurretMesh;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UArrowComponent* CannonSpawnPoint;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UBoxComponent* HitCollider;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UHealthComponent* HealthComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cannon")
-	TSubclassOf<class ACannon> CannonClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cannon")
-	int32 StartAmmo = 30;
-
-	UPROPERTY()
-	class ACannon* Cannon;
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Cannon")
+	//int32 StartAmmo = 30;
 
 	UPROPERTY()
 	class APawn* PlayerPawn;
@@ -62,13 +43,7 @@ protected:
 	void RotateToPlayer();
 	bool IsPlayerInRange();
 	bool CanFire();
-	void Fire();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Health")
-	void OnHealthChanged(float DamageAmount);
-
-	UFUNCTION(BlueprintNativeEvent, Category = "Health")
-	void OnDie();
 
 public:	
 	// Called every frame

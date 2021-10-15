@@ -13,16 +13,6 @@
 // Sets default values
 ATankPawn::ATankPawn()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
-	TankMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TankMesh"));
-	SetRootComponent(TankMeshComponent);
-
-	TurretMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
-	TurretMeshComponent->SetupAttachment(RootComponent);
-
-	CannonSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSpawn"));
-	CannonSpawnPoint->SetupAttachment(TurretMeshComponent);
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArmComponent->SetupAttachment(TurretMeshComponent);
@@ -35,56 +25,16 @@ ATankPawn::ATankPawn()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
-	HealthComponent->OnDie.AddDynamic(this, &ATankPawn::OnDie);
-	HealthComponent->OnHealthChanged.AddDynamic(this, &ATankPawn::OnHealthChanged);
-
 }
 
 void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	//SetupCannon(DefaultCannonClass);
-	SetupCannon(DefaultCannonClass, MaxAmmo);
-	CurrentCannonIndex = 0;
+
 	Cannon->ScoreOnKill.AddDynamic(this, &ATankPawn::AddScoreForKill);
 }
 
-void ATankPawn::OnHealthChanged_Implementation(float DamageAmount)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Tank %s taked damage: %f"), *GetName(), DamageAmount);
-}
-
-void ATankPawn::OnDie_Implementation()
-{
-	Destroy();
-}
-
-void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass, int32 AmmoAmount)
-{
-	if (InCannonClass && Cannons.Num() < MaxCannons)
-	{
-		FActorSpawnParameters Params;
-		Params.Instigator = this;
-		Params.Owner = this;
-		Cannon = GetWorld()->SpawnActor <ACannon>(InCannonClass, Params);
-		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		Cannon->AddAmmo(AmmoAmount);
-		Cannons.Add(Cannon);
-		//UE_LOG(LogTemp, Warning, TEXT("CurrentCannonIndex"))
-		CurrentCannonIndex = (CurrentCannonIndex + 1) % MaxCannons;
-	}
-	else
-	{
-		FActorSpawnParameters Params;
-		Params.Instigator = this;
-		Params.Owner = this;
-		Cannon = GetWorld()->SpawnActor <ACannon>(InCannonClass, Params);
-		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		Cannon->AddAmmo(AmmoAmount);
-		Cannons[CurrentCannonIndex] = Cannon;
-	}
-}
 
 void ATankPawn::AddScoreForKill(float Amount)
 {
@@ -131,13 +81,10 @@ void ATankPawn::SetTurretTargetPosition(const FVector& TargetPosition)
 	TurretTargetPosition = TargetPosition;
 }
 
-void ATankPawn::Fire()
-{
-	if (Cannon)
-	{
-		Cannon->Fire();
-	}
-}
+//void ATankPawn::Fire()
+//{
+//	Super::Fire();
+//}
 
 void ATankPawn::AltFire()
 {
@@ -151,10 +98,10 @@ void ATankPawn::ChangeCannon()
 {
 	if (Cannons.Num() <= 1) return;
 
-	Cannons[CurrentCannonIndex]->SetHidden(true);
+	Cannons[CurrentCannonIndex]->SetActorHiddenInGame(true);
 
 	CurrentCannonIndex = (CurrentCannonIndex + 1) % Cannons.Num();
-	Cannons[CurrentCannonIndex]->SetHidden(false);
+	Cannons[CurrentCannonIndex]->SetActorHiddenInGame(false);
 
 	Cannon = Cannons[CurrentCannonIndex];
 }
