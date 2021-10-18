@@ -57,13 +57,7 @@ void ACannon::Fire()
 				Params.Tag = TEXT("ShootFFParams");
 				GetWorld()->GetFirstPlayerController()->ClientPlayForceFeedback(ShootForceEffect);
 			}
-			if(ShootShakeEffect)
-			{
-				FForceFeedbackParameters Params;
-				Params.bLooping = false;
-				Params.Tag = TEXT("ShootFFParams");
-				GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(ShootShakeEffect);
-			}
+
 		}
 		ProjectilesFire();
 		GetWorld()->GetTimerManager().SetTimer(ProjectilesReloadTimerHandle, this, &ACannon::ProjectilesReload, 1.f / FireRate, false);

@@ -21,6 +21,17 @@ void UHealthComponent::TakeDamage(const FDamageData& DamageData)
 	float TakedDamageAmount = DamageData.DamageAmount;
 	CurrentHealth -= TakedDamageAmount;
 
+	if (GetOwner() == GetWorld()->GetFirstPlayerController()->GetPawn())
+	{
+		if (ShootShakeEffect)
+		{
+			FForceFeedbackParameters Params;
+			Params.bLooping = false;
+			Params.Tag = TEXT("ShootFFParams");
+			GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(ShootShakeEffect);
+		}
+	}
+
 	if (CurrentHealth <= 0.f)
 	{	
 		if (OnDie.IsBound())

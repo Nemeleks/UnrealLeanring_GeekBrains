@@ -37,8 +37,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UParticleSystem* DyingVisibleEffect;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UAudioComponent* DyingAudioEffect;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class USoundBase* DyingAudioEffect;
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Health")
 	void OnHealthChanged(float DamageAmount);

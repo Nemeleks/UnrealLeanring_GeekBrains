@@ -57,9 +57,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Effects")
 	class UForceFeedbackEffect* ShootForceEffect;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Effects")
-	TSubclassOf<class UCameraShakeBase> ShootShakeEffect;
-
 private:
 	bool bIsReadyToFireProjectiles = false;
 	bool bIsReadyToMultiplyFire = false;

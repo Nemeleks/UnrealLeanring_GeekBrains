@@ -19,6 +19,9 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Effects")
+	TSubclassOf<class UCameraShakeBase> ShootShakeEffect;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DropOnDeath")
 	TArray< TSubclassOf<class ABaseAmmoBox>> LootList;
 
