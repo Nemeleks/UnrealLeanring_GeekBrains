@@ -17,16 +17,30 @@ class TANKOGEDDON_API ATankPlayerController : public APlayerController
 protected:
 	UPROPERTY()
 	class ATankPawn* TankPawn;
+	UPROPERTY()
+	FVector MousePos;
 
 public:
 	ATankPlayerController();
 	virtual void SetupInputComponent() override;
+	virtual void Tick(float DeltaTime) override;
+
+	FVector GetMousePos() const { return MousePos; };
 
 protected:
 	virtual void BeginPlay() override;
 
+private:
 	void MoveForward(float Amount);
-	void MoveRight(float Amount);
 
 	void TurnTank(float Amount);
+
+	void Fire();
+
+	void AltFire();
+
+	void ChangeCannon();
+
+	UFUNCTION(exec)
+	void DumpActorPoolStats();
 };
