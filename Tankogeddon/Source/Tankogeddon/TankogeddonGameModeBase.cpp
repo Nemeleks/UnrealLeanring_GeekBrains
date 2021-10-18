@@ -11,6 +11,9 @@ void ATankogeddonGameModeBase::NotifyActorDestroyedByDamage(AActor* Actor, const
 	if (IScorable* Scorable = Cast<IScorable>(Actor))
 	{
 		ATankPlayerController* TankPlayerController = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController());
+
+		if (!TankPlayerController) return;
+
 		if (DamageData.Instigator == TankPlayerController->GetPawn())
 		{
 			TankPlayerController->AddScore(Scorable->GetScoreForKill());

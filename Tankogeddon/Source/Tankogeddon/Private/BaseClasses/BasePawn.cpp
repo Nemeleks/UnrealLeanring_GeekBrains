@@ -66,6 +66,7 @@ void ABasePawn::OnDie_Implementation()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DyingVisibleEffect, GetActorLocation(), GetActorRotation());
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DyingAudioEffect, GetActorLocation(), GetActorRotation());
+
 	if (Cannon)
 	{
 		Cannon->Destroy();

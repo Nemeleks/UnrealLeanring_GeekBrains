@@ -95,11 +95,6 @@ void ATankPawn::SetTurretTargetPosition(const FVector& TargetPosition)
 	TurretTargetPosition = TargetPosition;
 }
 
-//void ATankPawn::Fire()
-//{
-//	Super::Fire();
-//}
-
 void ATankPawn::AltFire()
 {
 	if (Cannon)
@@ -115,6 +110,7 @@ void ATankPawn::ChangeCannon()
 	Cannons[CurrentCannonIndex]->SetActorHiddenInGame(true);
 
 	CurrentCannonIndex = (CurrentCannonIndex + 1) % Cannons.Num();
+
 	Cannons[CurrentCannonIndex]->SetActorHiddenInGame(false);
 
 	Cannon = Cannons[CurrentCannonIndex];
