@@ -72,6 +72,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	void Fire();
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthPercent() const;
+
 private:
 
 

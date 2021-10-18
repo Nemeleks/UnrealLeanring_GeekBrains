@@ -27,14 +27,28 @@ ATankPawn::ATankPawn()
 
 }
 
+void ATankPawn::TakeDamage(const FDamageData& DamageData)
+{
+	HealthComponent->TakeDamage(DamageData);
+}
+
+float ATankPawn::GetScoreForKill()
+{
+	return ScoreForKill;
+}
+
 void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	//SetupCannon(DefaultCannonClass);
 
 	Cannon->ScoreOnKill.AddDynamic(this, &ATankPawn::AddScoreForKill);
 }
 
+
+FVector ATankPawn::GetTurretForwardVector()
+{
+	return	TurretMeshComponent->GetForwardVector();
+}
 
 void ATankPawn::AddScoreForKill(float Amount)
 {

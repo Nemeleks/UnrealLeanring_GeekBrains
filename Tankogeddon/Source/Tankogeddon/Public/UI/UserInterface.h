@@ -24,4 +24,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	float GetCurrentScore() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	float GetPlayerHealthPercent() const;
 };

@@ -57,6 +57,11 @@ void ABasePawn::OnDie_Implementation()
 	Destroy();
 }
 
+float ABasePawn::GetHealthPercent() const
+{
+	return HealthComponent->GetHealthState();
+}
+
 void ABasePawn::Fire()
 {
 	if (!Cannon) return;

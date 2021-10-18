@@ -43,3 +43,12 @@ float UUserInterface::GetCurrentScore() const
 	const auto PlayerTank = Cast<ATankPawn>(Player);
 	return PlayerTank->GetCurrentScore();
 }
+
+float UUserInterface::GetPlayerHealthPercent() const
+{
+	const auto Player = GetOwningPlayerPawn();
+	if (!Player) return 0;
+	const auto PlayerTank = Cast<ATankPawn>(Player);
+	return PlayerTank->GetHealthPercent();
+}
+

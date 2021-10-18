@@ -93,6 +93,18 @@ void ACannon::TraceFire()
 			DamageData.Instigator = GetInstigator();
 			DamageData.DamageMaker = this;
 			Damageable->TakeDamage(DamageData);
+			//UE_LOG(LogTemp, Warning, TEXT("DamageableActorName: "), *HitResult.Actor->GetName());
+
+			if (IScorable* Scorable = Cast<IScorable>(HitResult.Actor))
+			{
+				if (HitResult.Actor->IsActorBeingDestroyed())
+				{
+					if (ScoreOnKill.IsBound())
+					{
+						ScoreOnKill.Broadcast(Scorable->GetScoreForKill());
+					}
+				}
+			}
 		}
 	}
 	else
