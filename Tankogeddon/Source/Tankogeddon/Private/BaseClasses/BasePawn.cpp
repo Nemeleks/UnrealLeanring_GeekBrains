@@ -9,6 +9,8 @@
 #include <Components/StaticMeshComponent.h>
 #include <Particles/ParticleSystemComponent.h>
 #include <Components/AudioComponent.h>
+#include <Kismet/GameplayStatics.h>
+#include <Particles/ParticleSystem.h>
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -28,8 +30,8 @@ ABasePawn::ABasePawn()
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HitCollider"));
 	HitCollider->SetupAttachment(RootComponent);
 
-	DyingVisibleEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootVisibleEffect"));
-	DyingVisibleEffect->SetupAttachment(RootComponent);
+	DyingVisibleEffect = CreateDefaultSubobject<UParticleSystem>(TEXT("ShootVisibleEffect"));
+	DyingVisibleEffect->AddToRoot();
 
 	DyingAudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("ShootAudioEffect"));
 	DyingAudioEffect->SetupAttachment(RootComponent);
@@ -62,7 +64,7 @@ void ABasePawn::OnHealthChanged_Implementation(float DamageAmount)
 
 void ABasePawn::OnDie_Implementation()
 {
-	
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DyingVisibleEffect, GetActorLocation(), GetActorRotation());
 	if (Cannon)
 	{
 		Cannon->Destroy();
