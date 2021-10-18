@@ -8,6 +8,10 @@
 #include "Cannons/Projectiles/BaseProjectile.h"
 #include "Subsystems/ActolPoolSubsystem.h"
 #include "InterfaceClasses/Damageable.h"
+#include <Particles/ParticleSystemComponent.h>
+#include <Components/AudioComponent.h>
+#include "Camera/CameraShakeBase.h"
+#include "GameFramework/ForceFeedbackEffect.h"
 
 // Sets default values
 ACannon::ACannon()
@@ -23,16 +27,44 @@ ACannon::ACannon()
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("SpawnPount"));
 	ProjectileSpawnPoint->SetupAttachment(Mesh);
+
+	ShootVisibleEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootVisibleEffect"));
+	ShootVisibleEffect->SetupAttachment(ProjectileSpawnPoint);
+
+	ShootAudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("ShootAudioEffect"));
+	ShootAudioEffect->SetupAttachment(ProjectileSpawnPoint);
 }
 
 void ACannon::Fire()
 {
 	if (CurrentAmmo < 1) return;
+
+
 	if (CannonType == ECannonType::ProjectileCannon)
 	{
 		if (!bIsReadyToFireProjectiles) return;
 		CurrentAmmo -= 1;
 		bIsReadyToFireProjectiles = false;
+		ShootVisibleEffect->ActivateSystem();
+		ShootAudioEffect->Play();
+
+		if (GetOwner() == GetWorld()->GetFirstPlayerController()->GetPawn())
+		{
+			if (ShootForceEffect)
+			{
+				FForceFeedbackParameters Params;
+				Params.bLooping = false;
+				Params.Tag = TEXT("ShootFFParams");
+				GetWorld()->GetFirstPlayerController()->ClientPlayForceFeedback(ShootForceEffect);
+			}
+			if(ShootShakeEffect)
+			{
+				FForceFeedbackParameters Params;
+				Params.bLooping = false;
+				Params.Tag = TEXT("ShootFFParams");
+				GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(ShootShakeEffect);
+			}
+		}
 		ProjectilesFire();
 		GetWorld()->GetTimerManager().SetTimer(ProjectilesReloadTimerHandle, this, &ACannon::ProjectilesReload, 1.f / FireRate, false);
 	}
@@ -41,6 +73,8 @@ void ACannon::Fire()
 		if (!bIsReadyToFireTrace) return;
 		CurrentAmmo -= 1;
 		bIsReadyToFireTrace = false;
+		ShootVisibleEffect->ActivateSystem();
+		ShootAudioEffect->Play();
 		TraceFire();
 		GetWorld()->GetTimerManager().SetTimer(TraceReloadTimerHandle, this, &ACannon::TraceReload, 2.f / FireRate, false);
 	}
@@ -66,7 +100,6 @@ void ACannon::ProjectilesFire()
 		Projectile->GetScoreOnKill.AddDynamic(this, &ACannon::GetScoreOnKill);
 		Projectile->SetInstigator(GetInstigator());
 		Projectile-> Start();
-
 	}
 }
 
@@ -122,6 +155,8 @@ void ACannon::MultiplyFire()
 		GetWorld()->GetTimerManager().ClearTimer(MultiplyFireTimerHandle);
 	}
 	ABaseProjectile* Projectile = GetWorld()->SpawnActor<ABaseProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
+	ShootVisibleEffect->ActivateSystem();
+	ShootAudioEffect->Play();
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2.f, FColor::Red, TEXT("Fire - Projectile"));
 	if (Projectile)
 	{

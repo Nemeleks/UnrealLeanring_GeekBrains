@@ -7,6 +7,8 @@
 #include <Components/BoxComponent.h>
 #include "Cannons/Cannon.h"
 #include <Components/StaticMeshComponent.h>
+#include <Particles/ParticleSystemComponent.h>
+#include <Components/AudioComponent.h>
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -26,6 +28,11 @@ ABasePawn::ABasePawn()
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HitCollider"));
 	HitCollider->SetupAttachment(RootComponent);
 
+	DyingVisibleEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ShootVisibleEffect"));
+	DyingVisibleEffect->SetupAttachment(RootComponent);
+
+	DyingAudioEffect = CreateDefaultSubobject<UAudioComponent>(TEXT("ShootAudioEffect"));
+	DyingAudioEffect->SetupAttachment(RootComponent);
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDie.AddDynamic(this, &ABasePawn::OnDie);
@@ -39,6 +46,7 @@ void ABasePawn::BeginPlay()
 	SetupCannon(DefaultCannonClass, MaxAmmo);
 	CurrentCannonIndex = 0;
 }
+
 
 // Called every frame
 void ABasePawn::Tick(float DeltaTime)
@@ -54,6 +62,11 @@ void ABasePawn::OnHealthChanged_Implementation(float DamageAmount)
 
 void ABasePawn::OnDie_Implementation()
 {
+	
+	if (Cannon)
+	{
+		Cannon->Destroy();
+	}
 	Destroy();
 }
 

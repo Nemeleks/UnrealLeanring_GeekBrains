@@ -19,6 +19,9 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DropOnDeath")
+	TArray< TSubclassOf<class ABaseAmmoBox>> LootList;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
 	float MaxHealth = 10.f;
 
@@ -40,6 +43,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health Component")
 	void AddHealth(float AddHealthAmount);
 	
+
+
 protected:
 	UPROPERTY()
 	float CurrentHealth = 0.f;

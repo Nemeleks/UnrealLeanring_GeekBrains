@@ -4,6 +4,7 @@
 #include "UI/UserInterface.h"
 #include "Cannons/Cannon.h"
 #include "Player/TankPawn.h"
+#include "Player/TankPlayerController.h"
 
 int32 UUserInterface::GetPlayerAmmo() const
 {
@@ -38,10 +39,10 @@ FString UUserInterface::GetCannonTypeName() const
 
 float UUserInterface::GetCurrentScore() const
 {
-	const auto Player = GetOwningPlayerPawn();
-	if (!Player) return 0;
-	const auto PlayerTank = Cast<ATankPawn>(Player);
-	return PlayerTank->GetCurrentScore();
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	const auto TankPlayerController = Cast<ATankPlayerController>(PlayerController);
+
+	return TankPlayerController->GetCurrentScore();
 }
 
 float UUserInterface::GetPlayerHealthPercent() const

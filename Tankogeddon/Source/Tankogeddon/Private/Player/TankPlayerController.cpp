@@ -59,6 +59,11 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 }
 
+void ATankPlayerController::AddScore(float ScoreToAdd)
+{
+	CurrentScore += ScoreToAdd;
+}
+
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();

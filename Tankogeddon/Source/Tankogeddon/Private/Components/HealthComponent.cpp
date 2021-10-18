@@ -2,6 +2,8 @@
 
 
 #include "Components/HealthComponent.h"
+#include "../TankogeddonGameModeBase.h"
+#include "Cannons/AmmoBoxes/BaseAmmoBox.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -24,6 +26,17 @@ void UHealthComponent::TakeDamage(const FDamageData& DamageData)
 		if (OnDie.IsBound())
 		{
 			OnDie.Broadcast();
+		}
+
+		const auto GameMode = GetWorld()->GetAuthGameMode();
+		ATankogeddonGameModeBase* TankogeddonGameMode = Cast<ATankogeddonGameModeBase>(GameMode);
+
+		TankogeddonGameMode->NotifyActorDestroyedByDamage(GetOwner(), DamageData);
+
+		int32 LootIndex = FMath::RandRange(0, LootList.Num()-1);
+		if (GetOwner() != GetWorld()->GetFirstPlayerController())
+		{
+			GetWorld()->SpawnActor<ABaseAmmoBox>(LootList[LootIndex], GetOwner()->GetActorLocation(), GetOwner()->GetActorRotation());
 		}
 	}
 	else
