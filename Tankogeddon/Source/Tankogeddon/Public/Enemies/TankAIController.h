@@ -19,9 +19,6 @@ protected:
 	class ATankPawn* TankPawn;
 
 	int32 CurrentPointIndex = 0;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params", meta = (MakeEditWidget = true))
-	TArray<FVector> MovePoints;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
 	float TargetingRange = 2000.f;
