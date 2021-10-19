@@ -37,6 +37,17 @@ void ATurret::Destroyed()
 
 void ATurret::Targeting()
 {
+
+	FHitResult HitResult;
+	FVector TraceStart = GetActorLocation();
+	FVector TraceEnd = PlayerPawn->GetActorLocation();
+	FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("AITrace")), true, this);
+	TraceParams.bReturnPhysicalMaterial = false;
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, TraceParams) && HitResult.Actor != PlayerPawn)
+	{
+		return;
+	}
+
 	if (IsPlayerInRange())
 	{
 		RotateToPlayer();

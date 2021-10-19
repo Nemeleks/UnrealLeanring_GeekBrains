@@ -27,6 +27,12 @@ public:
 
 	FVector GetMousePos() const { return MousePos; };
 
+	UFUNCTION()
+	void AddScore(float ScoreToAdd);
+
+	UFUNCTION()
+	float GetCurrentScore() const {return CurrentScore;}
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -43,4 +49,6 @@ private:
 
 	UFUNCTION(exec)
 	void DumpActorPoolStats();
+
+	float CurrentScore = 0;
 };

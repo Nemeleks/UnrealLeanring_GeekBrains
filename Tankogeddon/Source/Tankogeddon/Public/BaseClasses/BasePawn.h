@@ -34,6 +34,12 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UBoxComponent* HitCollider;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UParticleSystem* DyingVisibleEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class USoundBase* DyingAudioEffect;
+
 	UFUNCTION(BlueprintNativeEvent, Category = "Health")
 	void OnHealthChanged(float DamageAmount);
 
@@ -71,6 +77,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	void Fire();
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthPercent() const;
 
 private:
 

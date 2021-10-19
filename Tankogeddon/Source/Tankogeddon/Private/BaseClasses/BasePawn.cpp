@@ -7,6 +7,10 @@
 #include <Components/BoxComponent.h>
 #include "Cannons/Cannon.h"
 #include <Components/StaticMeshComponent.h>
+#include <Components/AudioComponent.h>
+#include <Kismet/GameplayStatics.h>
+#include <Particles/ParticleSystem.h>
+#include <Sound/SoundBase.h>
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -26,6 +30,11 @@ ABasePawn::ABasePawn()
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HitCollider"));
 	HitCollider->SetupAttachment(RootComponent);
 
+	DyingVisibleEffect = CreateDefaultSubobject<UParticleSystem>(TEXT("ShootVisibleEffect"));
+	//DyingVisibleEffect->AddToRoot();
+
+	DyingAudioEffect = CreateDefaultSubobject<USoundBase>(TEXT("ShootAudioEffect"));
+//	DyingAudioEffect->SetupAttachment(RootComponent);
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDie.AddDynamic(this, &ABasePawn::OnDie);
@@ -39,6 +48,7 @@ void ABasePawn::BeginPlay()
 	SetupCannon(DefaultCannonClass, MaxAmmo);
 	CurrentCannonIndex = 0;
 }
+
 
 // Called every frame
 void ABasePawn::Tick(float DeltaTime)
@@ -54,7 +64,19 @@ void ABasePawn::OnHealthChanged_Implementation(float DamageAmount)
 
 void ABasePawn::OnDie_Implementation()
 {
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DyingVisibleEffect, GetActorLocation(), GetActorRotation());
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), DyingAudioEffect, GetActorLocation(), GetActorRotation());
+
+	if (Cannon)
+	{
+		Cannon->Destroy();
+	}
 	Destroy();
+}
+
+float ABasePawn::GetHealthPercent() const
+{
+	return HealthComponent->GetHealthState();
 }
 
 void ABasePawn::Fire()

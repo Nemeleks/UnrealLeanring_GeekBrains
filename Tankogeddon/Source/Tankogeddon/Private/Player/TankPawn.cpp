@@ -27,14 +27,28 @@ ATankPawn::ATankPawn()
 
 }
 
+void ATankPawn::TakeDamage(const FDamageData& DamageData)
+{
+	HealthComponent->TakeDamage(DamageData);
+}
+
+float ATankPawn::GetScoreForKill()
+{
+	return ScoreForKill;
+}
+
 void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	//SetupCannon(DefaultCannonClass);
 
 	Cannon->ScoreOnKill.AddDynamic(this, &ATankPawn::AddScoreForKill);
 }
 
+
+FVector ATankPawn::GetTurretForwardVector()
+{
+	return	TurretMeshComponent->GetForwardVector();
+}
 
 void ATankPawn::AddScoreForKill(float Amount)
 {
@@ -81,11 +95,6 @@ void ATankPawn::SetTurretTargetPosition(const FVector& TargetPosition)
 	TurretTargetPosition = TargetPosition;
 }
 
-//void ATankPawn::Fire()
-//{
-//	Super::Fire();
-//}
-
 void ATankPawn::AltFire()
 {
 	if (Cannon)
@@ -101,6 +110,7 @@ void ATankPawn::ChangeCannon()
 	Cannons[CurrentCannonIndex]->SetActorHiddenInGame(true);
 
 	CurrentCannonIndex = (CurrentCannonIndex + 1) % Cannons.Num();
+
 	Cannons[CurrentCannonIndex]->SetActorHiddenInGame(false);
 
 	Cannon = Cannons[CurrentCannonIndex];
