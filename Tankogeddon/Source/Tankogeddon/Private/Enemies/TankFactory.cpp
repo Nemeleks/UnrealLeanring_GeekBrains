@@ -8,6 +8,7 @@
 #include "TimerManager.h"
 #include "Components/HealthComponent.h"
 #include "Player/TankPawn.h"
+#include "Core/MapLoader.h"
 
 // Sets default values
 ATankFactory::ATankFactory()
@@ -71,6 +72,12 @@ void ATankFactory::OnDie()
 	bIsFactoryAlive = false;
 	BuildingMesh->SetHiddenInGame(true);
 	DestroyedBuildingMesh->SetHiddenInGame(false);
+
+	if (MapLoader)
+	{
+		MapLoader->SetIsActicated(true);
+	}
+	
 	//Destroy();
 }
 

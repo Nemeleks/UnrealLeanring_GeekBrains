@@ -46,6 +46,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn params")
 	TArray<class ATargetPoint*> WayPoints;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MapLoader Params")
+	class AMapLoader* MapLoader;
+
 public:	
 	
 	UFUNCTION()
