@@ -37,6 +37,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Component")
 	class UBoxComponent* HitCollider;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Component")
+	class UParticleSystemComponent* DestroyingEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Component")
+	class UParticleSystemComponent* TankSpawnEffect;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Spawn params")
 	float SpawnInterval = 20.f;
 

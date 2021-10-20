@@ -9,6 +9,7 @@
 #include "Components/HealthComponent.h"
 #include "Player/TankPawn.h"
 #include "Core/MapLoader.h"
+#include <Particles/ParticleSystemComponent.h>
 
 // Sets default values
 ATankFactory::ATankFactory()
@@ -25,9 +26,14 @@ ATankFactory::ATankFactory()
 	DestroyedBuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DestroyedBuildingMesh"));
 	DestroyedBuildingMesh->SetupAttachment(RootComponent);
 	
+	DestroyingEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DestroyingEffect"));
+	DestroyingEffect->SetupAttachment(DestroyedBuildingMesh);
 
 	TankSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("TankSpawnPoint"));
 	TankSpawnPoint->SetupAttachment(RootComponent);
+
+	TankSpawnEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("TankSpawnEffect"));
+	TankSpawnEffect->SetupAttachment(TankSpawnPoint);
 
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HitCollider"));
 	HitCollider->SetupAttachment(RootComponent);
@@ -59,6 +65,7 @@ void ATankFactory::SpawnNewTank()
 {	
 	if (bIsFactoryAlive)
 	{
+		TankSpawnEffect->ActivateSystem();
 		FTransform SpawnTransform(TankSpawnPoint->GetComponentRotation(), TankSpawnPoint->GetComponentLocation(), FVector(1.f));
 		ATankPawn* NewTank = GetWorld()->SpawnActorDeferred<ATankPawn>(SpawnClass, SpawnTransform, this, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		NewTank->SetMovingPoints(WayPoints);
@@ -71,6 +78,7 @@ void ATankFactory::OnDie()
 	GetWorld()->GetTimerManager().ClearTimer(TankSpawnTimerHandle);
 	bIsFactoryAlive = false;
 	BuildingMesh->SetHiddenInGame(true);
+	DestroyingEffect->ActivateSystem();
 	DestroyedBuildingMesh->SetHiddenInGame(false);
 
 	if (MapLoader)
