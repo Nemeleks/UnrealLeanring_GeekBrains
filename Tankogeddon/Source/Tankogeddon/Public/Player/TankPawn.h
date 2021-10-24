@@ -7,6 +7,7 @@
 #include "BaseClasses/BasePawn.h"
 #include "InterfaceClasses/Damageable.h"
 #include "InterfaceClasses/Scorable.h"
+#include <Engine/TargetPoint.h>
 #include "TankPawn.generated.h"
 
 UCLASS()
@@ -50,7 +51,7 @@ protected:
 	float TurretRotationSmoothness = 5.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params", meta = (MakeEditWidget = true))
-	TArray<FVector> MovePoints;
+	TArray<class ATargetPoint*> MovePoints;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params")
 	float MovementAccuracy = 50.f;
@@ -110,8 +111,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Scoring")
 	float GetCurrentScore() const { return CurrentScore; }
 
+	UFUNCTION(BlueprintCallable, Category = "AI|Move params")
+		void SetMovingPoints(const TArray<class ATargetPoint*>& InPoints)
+	{
+		MovePoints = InPoints;
+	}
+
 	UFUNCTION(BlueprintPure, Category = "AI|Move params")
-	const TArray<FVector>& GetMovePoints() {return MovePoints;}
+	const TArray<class ATargetPoint*>& GetMovePoints() {return MovePoints;}
 
 	UFUNCTION(BlueprintPure, Category = "AI|Move params")
 	float GetMovementAccuracy() {return MovementAccuracy;}

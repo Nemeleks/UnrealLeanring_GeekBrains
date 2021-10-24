@@ -44,10 +44,13 @@ void UHealthComponent::TakeDamage(const FDamageData& DamageData)
 
 		TankogeddonGameMode->NotifyActorDestroyedByDamage(GetOwner(), DamageData);
 
-		int32 LootIndex = FMath::RandRange(0, LootList.Num()-1);
-		if (GetOwner() != GetWorld()->GetFirstPlayerController())
+		if (LootList.Num() >0)
 		{
-			GetWorld()->SpawnActor<ABaseAmmoBox>(LootList[LootIndex], GetOwner()->GetActorLocation(), GetOwner()->GetActorRotation());
+			int32 LootIndex = FMath::RandRange(0, LootList.Num() - 1);
+			if (GetOwner() != GetWorld()->GetFirstPlayerController())
+			{
+				GetWorld()->SpawnActor<ABaseAmmoBox>(LootList[LootIndex], GetOwner()->GetActorLocation(), GetOwner()->GetActorRotation());
+			}
 		}
 	}
 	else

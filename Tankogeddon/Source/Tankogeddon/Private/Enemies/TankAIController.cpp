@@ -4,25 +4,19 @@
 #include "Enemies/TankAIController.h"
 #include "Player/TankPawn.h"
 #include <DrawDebugHelpers.h>
+#include <Engine/TargetPoint.h>
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TankPawn = Cast<ATankPawn>(GetPawn());
-	if (TankPawn)
-	{
-		for (const FVector& Point : TankPawn->GetMovePoints())
-		{
-			MovePoints.Add(TankPawn->GetActorLocation() + Point);
-		}
-	}
 }
 
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	TankPawn = Cast<ATankPawn>(GetPawn());
 	if (TankPawn)
 	{
 		MoveToNextPoint();
@@ -32,6 +26,8 @@ void ATankAIController::Tick(float DeltaTime)
 
 void ATankAIController::MoveToNextPoint()
 {
+	const TArray<class ATargetPoint*>& MovePoints = TankPawn->GetMovePoints();
+
 	if (MovePoints.Num() == 0)
 	{
 		return;
@@ -39,7 +35,7 @@ void ATankAIController::MoveToNextPoint()
 
 	TankPawn->MoveForward(1.f);
 	FVector PawnLocation = TankPawn->GetActorLocation();
-	FVector CurrentPoint = MovePoints[CurrentPointIndex];
+	FVector CurrentPoint = MovePoints[CurrentPointIndex]->GetActorLocation();
 	if (FVector::DistSquared(PawnLocation, CurrentPoint) <= FMath::Square(TankPawn->GetMovementAccuracy()))
 	{
 		CurrentPointIndex++;
@@ -75,6 +71,8 @@ void ATankAIController::MoveToNextPoint()
 void ATankAIController::Targetring()
 {
 	APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!PlayerPawn) return;
+
 	if (FVector::DistSquared(PlayerPawn->GetActorLocation(), TankPawn->GetActorLocation()) > FMath::Square(TargetingRange))
 	{
 		return;
