@@ -32,6 +32,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics")
 	float Mass = 1.f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics|Explosion")
+	bool bIsExlosiveProjectile = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics|Explosion", meta = (EditCondition = "bIsExlosiveProjectile"))
+		float ExpolionRange = 300.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics|Explosion", meta = (EditCondition = "bIsExlosiveProjectile"))
+		float ExpolionImpulse = 100.f;
+
 public:
 	// Sets default values for this actor's properties
 	ABaseProjectile();
