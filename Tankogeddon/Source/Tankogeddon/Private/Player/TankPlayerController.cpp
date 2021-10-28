@@ -19,6 +19,7 @@ void ATankPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Fire", IE_Pressed, this, &ATankPlayerController::Fire);
 	InputComponent->BindAction("AltFire", IE_Pressed, this, &ATankPlayerController::AltFire);
 	InputComponent->BindAction("ChangeCannon", IE_Pressed, this, &ATankPlayerController::ChangeCannon);
+	InputComponent->BindAxis("LiftCannon", this, &ATankPlayerController::LiftCannon);
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -54,8 +55,24 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 	DrawDebugLine(GetWorld(), TankPawn->GetTurretMeshLocation(), TurretTargetPosition, FColor::Green, false, 0.1f, 0, 5.f);
 	TankPawn->SetTurretTargetPosition(TurretTargetPosition);
-
 	
+	
+
+	float angle = FMath::DegreesToRadians(-TankPawn->GetCannon()->GetCannonPitchRotation()); // no air resistence, so 45 degrees provides maximum range
+	float cos = FMath::Cos(angle);
+	float sin = FMath::Sin(angle);
+	float speed = 1000.f;
+	float initial_height = TankPawn->GetCannon()->GetProgectileSpawnPointLocation().Z;
+	float gravity = -GetWorld()->GetGravityZ();
+
+	UE_LOG(LogTemp, Warning, TEXT("Cannon Pitch = %f"), TankPawn->GetCannon()->GetCannonPitchRotation());
+
+	float range = (speed * cos / gravity) * (speed * sin + FMath::Sqrt(speed * speed * sin * sin + 2 * gravity * initial_height));
+
+	FVector EndPosit = TankPawn->GetCannon()->GetProgectileSpawnPointLocation() + TurretTargetDirection * range;
+	EndPosit.Z = 0.f;
+
+	DrawDebugSphere(GetWorld(), EndPosit, 20.f, 30, FColor::Red, false, 0.1f, 0, 5.f);
 
 }
 

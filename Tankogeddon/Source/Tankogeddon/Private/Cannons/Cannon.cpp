@@ -35,6 +35,11 @@ ACannon::ACannon()
 	ShootAudioEffect->SetupAttachment(ProjectileSpawnPoint);
 }
 
+
+FVector ACannon::GetProgectileSpawnPointLocation()
+{
+	return ProjectileSpawnPoint->GetComponentLocation();
+}
 void ACannon::Fire()
 {
 	if (CurrentAmmo < 1) return;
@@ -194,6 +199,11 @@ void ACannon::AltFire()
 void ACannon::GetScoreOnKill(float Amount)
 {
 	ScoreOnKill.Broadcast(Amount);
+}
+
+float ACannon::GetCannonPitchRotation() const
+{
+	return Mesh->GetComponentRotation().Pitch;
 }
 
 void ACannon::AddAmmo(int32 Amount)

@@ -91,6 +91,9 @@ public:
 	void MultiplyFire();
 	void AltFire();
 
+	FVector GetProgectileSpawnPointLocation();
+	float GetCannonPitchRotation() const;
+
 	UFUNCTION()
 	int32 GetCurrentAmmo() const { return CurrentAmmo; };
 
