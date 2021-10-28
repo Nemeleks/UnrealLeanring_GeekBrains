@@ -84,6 +84,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void TurnTank(float Amount);
 
+	UFUNCTION(BlueprintCallable, Category = "Targeting")
+	void LiftCannon(float Amount);
+
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void SetTurretTargetPosition(const FVector& TargetPosition);
 

@@ -48,6 +48,9 @@ public:
 	virtual void Start();
 	virtual void Stop();
 
+	UFUNCTION()
+	float GetMoveSpeed() const { return MoveSpeed; }
+
 	UPROPERTY()
 	FGetScoreOnKill GetScoreOnKill;
 

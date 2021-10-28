@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
+
 /**
  * 
  */
@@ -46,6 +47,8 @@ private:
 	void AltFire();
 
 	void ChangeCannon();
+
+	void LiftCannon(float Amount);
 
 	UFUNCTION(exec)
 	void DumpActorPoolStats();

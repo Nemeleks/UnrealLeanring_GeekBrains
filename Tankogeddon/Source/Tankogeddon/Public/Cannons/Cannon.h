@@ -90,6 +90,8 @@ public:
 	void TraceFire();
 	void MultiplyFire();
 	void AltFire();
+	void LiftCannon(float Amount);
+	float GetProjectileMovementSpeed() const;
 
 	FVector GetProgectileSpawnPointLocation();
 	float GetCannonPitchRotation() const;
