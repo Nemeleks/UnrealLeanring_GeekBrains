@@ -58,7 +58,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 	
 	
 
-	float angle = FMath::DegreesToRadians(90.f + TankPawn->GetCannon()->GetCannonPitchRotation()); // no air resistence, so 45 degrees provides maximum range
+	float angle = FMath::DegreesToRadians(90.f + TankPawn->GetCannon()->GetCannonPitchRotation()); 
 	float cos = FMath::Cos(angle);
 	float sin = FMath::Sin(angle);
 	float speed = TankPawn->GetCannon()->GetProjectileMovementSpeed();

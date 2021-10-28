@@ -54,6 +54,9 @@ public:
 	UPROPERTY()
 	FGetScoreOnKill GetScoreOnKill;
 
+	UFUNCTION()
+		bool IsExplosiveProjectile() { return bIsExlosiveProjectile;}
+
 protected:
 	UFUNCTION()
 	virtual void OnComponentHit(class UPrimitiveComponent* HitComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, 

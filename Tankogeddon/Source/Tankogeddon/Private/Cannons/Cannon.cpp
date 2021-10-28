@@ -46,6 +46,11 @@ float ACannon::GetProjectileMovementSpeed() const
 	return ProjectileClass->GetDefaultObject<ABaseProjectile>()->GetMoveSpeed();
 }
 
+bool ACannon::IsMortair()
+{
+	return ProjectileClass->GetDefaultObject<ABaseProjectile>()->IsExplosiveProjectile();
+}
+
 void ACannon::Fire()
 {
 	if (CurrentAmmo < 1) return;

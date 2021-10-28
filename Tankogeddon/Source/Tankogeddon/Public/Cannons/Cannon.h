@@ -92,6 +92,7 @@ public:
 	void AltFire();
 	void LiftCannon(float Amount);
 	float GetProjectileMovementSpeed() const;
+	bool IsMortair();
 
 	FVector GetProgectileSpawnPointLocation();
 	float GetCannonPitchRotation() const;

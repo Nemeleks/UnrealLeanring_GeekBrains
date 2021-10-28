@@ -5,6 +5,7 @@
 #include "Player/TankPawn.h"
 #include <DrawDebugHelpers.h>
 #include <Engine/TargetPoint.h>
+#include "Cannons/Cannon.h"
 
 void ATankAIController::BeginPlay()
 {
@@ -72,6 +73,7 @@ void ATankAIController::Targetring()
 {
 	APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!PlayerPawn) return;
+
 
 	if (FVector::DistSquared(PlayerPawn->GetActorLocation(), TankPawn->GetActorLocation()) > FMath::Square(TargetingRange))
 	{
