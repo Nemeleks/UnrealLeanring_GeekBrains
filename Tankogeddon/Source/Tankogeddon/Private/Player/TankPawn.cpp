@@ -85,6 +85,14 @@ void ATankPawn::MoveForward(float Amount)
 	TargetForwardAxisValue = Amount;
 }
 
+void ATankPawn::LiftCannon(float Amount)
+{
+	if (Cannon)
+	{
+		Cannon->LiftCannon(Amount);
+	}
+}
+
 void ATankPawn::TurnTank(float Amount)
 {
 	TargetTurnAxisValue = Amount;

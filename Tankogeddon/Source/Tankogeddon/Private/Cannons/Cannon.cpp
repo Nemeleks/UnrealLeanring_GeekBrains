@@ -35,6 +35,22 @@ ACannon::ACannon()
 	ShootAudioEffect->SetupAttachment(ProjectileSpawnPoint);
 }
 
+
+FVector ACannon::GetProgectileSpawnPointLocation()
+{
+	return ProjectileSpawnPoint->GetComponentLocation();
+}
+
+float ACannon::GetProjectileMovementSpeed() const
+{
+	return ProjectileClass->GetDefaultObject<ABaseProjectile>()->GetMoveSpeed();
+}
+
+bool ACannon::IsMortair()
+{
+	return ProjectileClass->GetDefaultObject<ABaseProjectile>()->IsExplosiveProjectile();
+}
+
 void ACannon::Fire()
 {
 	if (CurrentAmmo < 1) return;
@@ -196,9 +212,29 @@ void ACannon::GetScoreOnKill(float Amount)
 	ScoreOnKill.Broadcast(Amount);
 }
 
+float ACannon::GetCannonPitchRotation() const
+{
+	return Mesh->GetComponentRotation().Pitch;
+}
+
 void ACannon::AddAmmo(int32 Amount)
 {
 	CurrentAmmo += Amount;
+}
+
+void ACannon::LiftCannon(float Amount)
+{
+	if (Mesh->GetComponentRotation().Pitch - 1.f < -76.f)
+	{
+		Mesh->SetRelativeRotation(FRotator(-74.f, 0.f, 0.f));
+		return;
+	}
+	else if (Mesh->GetComponentRotation().Pitch + 1.f > -14.f)
+	{
+		Mesh->SetRelativeRotation(FRotator(-16.f, 0.f, 0.f));
+		return;
+	}
+	Mesh->AddRelativeRotation(FRotator(Amount,0.f,0.f));
 }
 
 // Called when the game starts or when spawned

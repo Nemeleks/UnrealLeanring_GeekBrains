@@ -90,6 +90,12 @@ public:
 	void TraceFire();
 	void MultiplyFire();
 	void AltFire();
+	void LiftCannon(float Amount);
+	float GetProjectileMovementSpeed() const;
+	bool IsMortair();
+
+	FVector GetProgectileSpawnPointLocation();
+	float GetCannonPitchRotation() const;
 
 	UFUNCTION()
 	int32 GetCurrentAmmo() const { return CurrentAmmo; };

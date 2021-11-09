@@ -8,6 +8,7 @@
 #include "Cannons/Cannon.h"
 #include <Kismet/KismetMathLibrary.h>
 #include "Components/HealthComponent.h"
+#include <DrawDebugHelpers.h>
 
 // Sets default values
 ATurret::ATurret()
@@ -23,6 +24,20 @@ void ATurret::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	if (Cannon->IsMortair())
+	{
+		float MaxAngle = FMath::DegreesToRadians(45);
+		float MaxCos = FMath::Cos(MaxAngle);
+		float MaxSin = FMath::Sin(MaxAngle);
+
+		float speed = Cannon->GetProjectileMovementSpeed();
+		float initial_height = Cannon->GetProgectileSpawnPointLocation().Z;
+		float gravity = -GetWorld()->GetGravityZ();
+		float MaxRange = (speed * MaxCos / gravity) * (speed * MaxSin + FMath::Sqrt(speed * speed * MaxSin * MaxSin + 2 * gravity * initial_height));
+		TargetingRange = MaxRange;
+
+	}
 }
 
 void ATurret::Destroyed()
@@ -38,6 +53,8 @@ void ATurret::Destroyed()
 void ATurret::Targeting()
 {
 
+	
+
 	FHitResult HitResult;
 	FVector TraceStart = GetActorLocation();
 	FVector TraceEnd = PlayerPawn->GetActorLocation();
@@ -51,7 +68,38 @@ void ATurret::Targeting()
 	if (IsPlayerInRange())
 	{
 		RotateToPlayer();
+		if (Cannon->IsMortair())
+		{
+			float angle = FMath::DegreesToRadians(90.f + Cannon->GetCannonPitchRotation());
+			float cos = FMath::Cos(angle);
+			float sin = FMath::Sin(angle);
+
+			float speed = Cannon->GetProjectileMovementSpeed();
+
+			float initial_height = Cannon->GetProgectileSpawnPointLocation().Z;
+			float gravity = -GetWorld()->GetGravityZ();
+
+			float range = (speed * cos / gravity) * (speed * sin + FMath::Sqrt(speed * speed * sin * sin + 2 * gravity * initial_height));
+
+
+			FVector EndPosit = Cannon->GetProgectileSpawnPointLocation() + Cannon->GetActorForwardVector() * range;
+			EndPosit.Z = 0.f;
+
+			DrawDebugSphere(GetWorld(), EndPosit, 20.f, 30, FColor::Purple, false, 0.1f, 0, 5.f);
+
+			if (FVector::Distance(EndPosit, GetActorLocation()) > FVector::Distance(PlayerPawn->GetActorLocation(), GetActorLocation()))
+			{
+				Cannon->LiftCannon(1.f);
+			}
+			else if (FVector::Distance(EndPosit, GetActorLocation()) < FVector::Distance(PlayerPawn->GetActorLocation(), GetActorLocation()))
+			{
+				Cannon->LiftCannon(-1.f);
+			}
+		}
 	}
+
+	
+
 	if (CanFire() && Cannon )
 	{
 		Fire();
@@ -88,6 +136,8 @@ void ATurret::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	Targeting();
+
+
 }
 
 void ATurret::TakeDamage(const FDamageData& DamageData)

@@ -6,6 +6,7 @@
 #include "InterfaceClasses/Damageable.h"
 #include "InterfaceClasses/Scorable.h"
 #include "Player/TankPawn.h"
+#include <GameFramework/Actor.h>
 
 // Sets default values
 ABaseProjectile::ABaseProjectile()
@@ -48,7 +49,8 @@ void ABaseProjectile::Stop()
 	}
 }
 
-void ABaseProjectile::OnComponentHit(class UPrimitiveComponent* HitComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ABaseProjectile::OnComponentHit(class UPrimitiveComponent* HitComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& HitResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Projectile %s collided with %s"), *GetName(), *OtherActor->GetName());
 
@@ -56,6 +58,75 @@ void ABaseProjectile::OnComponentHit(class UPrimitiveComponent* HitComponent, cl
 	{
 		Stop();
 		return;
+	}
+
+	if (bIsExlosiveProjectile)
+	{
+		FVector StartPos = GetActorLocation();
+		FVector EndPos = StartPos + FVector(0.1f);
+
+		FCollisionShape Shape = FCollisionShape::MakeSphere(ExpolionRange);
+		FCollisionQueryParams Params = FCollisionQueryParams::DefaultQueryParam;
+		Params.AddIgnoredActor(this);
+		Params.bTraceComplex = true;
+		Params.TraceTag = "ExplodeTrace";
+
+		TArray<FHitResult> AttackResult;
+
+		FQuat Rotation = FQuat::Identity;
+
+		GetWorld()->DebugDrawTraceTag = "ExplodeTrace";
+
+		bool bSweepResult = GetWorld()->SweepMultiByChannel
+		(
+			AttackResult,
+			StartPos,
+			EndPos,
+			Rotation,
+			ECollisionChannel::ECC_Visibility,
+			Shape,
+			Params
+		);
+
+		if (bSweepResult)
+		{
+			for (FHitResult HitRes : AttackResult)
+			{
+				AActor* HitActor = HitRes.GetActor();
+				if (!HitActor)
+				{
+					continue;
+				}
+
+				IDamageable* DamageableActor = Cast<IDamageable>(HitActor);
+				if (DamageableActor)
+				{
+					FDamageData DamageData;
+					DamageData.DamageAmount = Damage;
+					DamageData.Instigator = GetOwner();
+					DamageData.DamageMaker = this;
+
+					DamageableActor->TakeDamage(DamageData);
+				}
+
+				UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(HitActor->GetRootComponent());
+				if (PrimitiveComponent)
+				{
+					if (PrimitiveComponent->IsSimulatingPhysics())
+					{
+						FVector Impusle = HitActor->GetActorLocation() - GetActorLocation();
+						Impusle.Normalize();
+						PrimitiveComponent->AddImpulseAtLocation(Impusle * ExpolionImpulse, HitResult.ImpactPoint);
+					}
+				}
+			}
+		}
+	}
+
+	if (OtherComp->IsSimulatingPhysics())
+	{
+		FVector Impulse = Mass * MoveSpeed * GetActorForwardVector();
+		OtherComp->AddImpulseAtLocation(Impulse, HitResult.ImpactPoint);
 	}
 
 	if (OtherActor && OtherComp && OtherComp->GetCollisionObjectType() == ECC_Destructible)

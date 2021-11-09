@@ -29,19 +29,38 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Scoring")
 	float Score = 10.f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics")
+	float Mass = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics|Explosion")
+	bool bIsExlosiveProjectile = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics|Explosion", meta = (EditCondition = "bIsExlosiveProjectile"))
+		float ExpolionRange = 300.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Physics|Explosion", meta = (EditCondition = "bIsExlosiveProjectile"))
+		float ExpolionImpulse = 100.f;
+
 public:
 	// Sets default values for this actor's properties
 	ABaseProjectile();
 
-	void Start();
-	void Stop();
+	virtual void Start();
+	virtual void Stop();
+
+	UFUNCTION()
+	float GetMoveSpeed() const { return MoveSpeed; }
 
 	UPROPERTY()
 	FGetScoreOnKill GetScoreOnKill;
 
+	UFUNCTION()
+		bool IsExplosiveProjectile() { return bIsExlosiveProjectile;}
+
 protected:
 	UFUNCTION()
-		void OnComponentHit(class UPrimitiveComponent* HitComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	virtual void OnComponentHit(class UPrimitiveComponent* HitComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, 
+		FVector NormalImpulse, const FHitResult& HitResult);
 
 public:	
 	// Called every frame
