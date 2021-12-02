@@ -9,6 +9,17 @@
 /**
  * 
  */
+
+UENUM()
+enum class EWidgetID : uint8
+{
+	None,
+	MainMenu,
+	Options,
+	GameOverScreen,
+	PlayerHUD
+};
+
 UCLASS()
 class TANKOGEDDON_API AGameHUD : public AHUD
 {
@@ -16,7 +27,21 @@ class TANKOGEDDON_API AGameHUD : public AHUD
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
+	TMap<EWidgetID,TSubclassOf<UUserWidget>> WidgetClasses;
 
+	UPROPERTY()
+	UUserWidget* CurrentWidget;
+
+	EWidgetID CurrentWidgetID = EWidgetID::None;
+
+public:
 	virtual void BeginPlay() override;
+
+	UUserWidget* UseWidget(EWidgetID WidgetID, bool RemovePrevious = true, int32 ZOrder = 0);
+
+	UUserWidget* GetCurrentWidget();
+
+	void RemoveCurrentWidgetFromViewport();
+	UUserWidget* AddWidgetByClass(TSubclassOf<UUserWidget> WidgetClass, int32 ZOrder = 0);
+	
 };

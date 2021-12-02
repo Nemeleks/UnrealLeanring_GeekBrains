@@ -12,6 +12,9 @@
 #include <Particles/ParticleSystem.h>
 #include <Sound/SoundBase.h>
 
+#include "Components/WidgetComponent.h"
+#include "UI/HealthWidget.h"
+
 // Sets default values
 ABasePawn::ABasePawn()
 {
@@ -39,6 +42,9 @@ ABasePawn::ABasePawn()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDie.AddDynamic(this, &ABasePawn::OnDie);
 	HealthComponent->OnHealthChanged.AddDynamic(this, &ABasePawn::OnHealthChanged);
+
+	HealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthWidget"));
+	HealthWidgetComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +61,11 @@ void ABasePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (UHealthWidget* HealthWidget = Cast<UHealthWidget>(HealthWidgetComponent->GetUserWidgetObject()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HEALTH OK"));
+		HealthWidget->SetHealthPercent(GetHealthPercent());
+	}
 }
 
 void ABasePawn::OnHealthChanged_Implementation(float DamageAmount)

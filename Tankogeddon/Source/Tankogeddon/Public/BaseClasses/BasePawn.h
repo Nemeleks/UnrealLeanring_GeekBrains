@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class USoundBase* DyingAudioEffect;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UWidgetComponent* HealthWidgetComponent;
+
 	UFUNCTION(BlueprintNativeEvent, Category = "Health")
 	void OnHealthChanged(float DamageAmount);
 
